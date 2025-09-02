@@ -1,19 +1,35 @@
 **Python**
 - Brendon: Proficient
-- Michael:
+- Michael: Proficient
 - Gavin:
   
 **Java**
 - Brendon: Proficient
-- Michael: 
+- Michael: Competent
 - Gavin:
   
 **C**
 - Brendon: Competent
-- Michael:
+- Michael: Competent
 - Gavin:
   
 **C++**
 - Brendon: Competent
-- Michael:
+- Michael: Proficient
 - Gavin:
+
+**SQL**
+- Brendon:
+- Michael: Competent
+- Gavin:
+
+**HTML**
+- Brendon:
+- Michael: Competent
+- Gavin:
+
+**CSS**
+- Brendon:
+- Michael: Competent
+- Gavin:
+
