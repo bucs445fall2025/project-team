@@ -1,8 +1,8 @@
 # << Project Title >>
 ## CS 445 Final Project
-### << Semester, Year >>
+### << Fall, 2025 >>
 
-### Team: << team name >>
+### Team: << 😃 >>
 << List Team Members >>
 
 ## Getting Started
