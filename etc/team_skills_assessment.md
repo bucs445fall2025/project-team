@@ -26,11 +26,11 @@
 **HTML**
 - Brendon: Novice
 - Michael: Competent
-- Gavin:
+- Gavin: Novice
 
 **CSS**
 - Brendon: None
 - Michael: Competent
-- Gavin:
+- Gavin: None
   
 
