@@ -67,6 +67,19 @@
 - Python for model development
 - Undecided for application interface
 
+##Backend##
+Python 3.13.7 with fastAPI
+
+##Web Server##
+Nginx
+
+##Database##
+MySQL 8.4.6
+
+##Cache##
+Redis (for storing stock data locally without the need to query DB again)
+
 ### **Libraries/Frameworks:**
 [List any specific libraries or frameworks your application will use, such as React, Flask, Django, etc.]
+
 - PyTorch
