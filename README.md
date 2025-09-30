@@ -2,8 +2,10 @@
 ## CS 445 Final Project
 ### << Fall, 2025 >>
 
-### Team: << 😃 >>
-<< List Team Members >>
+### Team: 😃
+- Brendon Paolino
+- Michael Zheng
+- Gavin Suber
 
 ## Getting Started
 <<One paragraph of project description goes here>>
