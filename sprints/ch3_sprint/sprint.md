@@ -83,3 +83,4 @@ Redis (for storing stock data locally without the need to query DB again)
 [List any specific libraries or frameworks your application will use, such as React, Flask, Django, etc.]
 
 - PyTorch
+- Yahoo Finance API
