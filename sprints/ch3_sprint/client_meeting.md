@@ -5,17 +5,16 @@
 3/3
 
 ## Requirements Attempted in next Sprint
-- Create application backbone
-    - Set up template server files
-    - Set up temp API/Database
-    - Set up compose.yml for Docker
+
+- Get Stock Data
 
 ## Milestone Status (Pass/Fail)
 
+Pass
 
 ## Requested Changes
-- Check over etc folder for missing markdown files
+
 
 ## Additional Notes
 😃
-
+- Access Stock to Data by Web Scrape
