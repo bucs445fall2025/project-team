@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 import yfinance as yf
 
 
@@ -10,11 +10,33 @@ async def read_root():
 
 @app.get("/api/v1/stock/{symbol}")
 async def get_stock(symbol: str):
-	dat = yf.Ticker(symbol)
-	# add caching here for fewer API calls
-	return dat.info
+	try:
+		dat = yf.Ticker(symbol)
+		# add caching here for fewer API calls
+		return dat.info
+	except Exception as e:
+		raise HTTPException(
+			status_code=500,
+			detail=f"Lookup failed: {str(e)}"
+		)
 
-
+@app.get("/api/v1/company/{company}")
+async def get_symbol(company: str):
+	try:
+		dat = yf.Lookup(company)
+		df = dat.get_stock(1)
+		if df.empty:
+			raise HTTPException(
+				status_code=404,
+				detail=f"No comapny found for '{company}"
+			)
+		symbol = df.index.item()
+		return {"symbol":symbol}
+	except Exception as e:
+		raise HTTPException(
+			status_code=500,
+			detail=f"Lookup failed: {str(e)}"
+		)
 
 if __name__ == "__main__":
 	import uvicorn
