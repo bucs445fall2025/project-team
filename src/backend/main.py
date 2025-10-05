@@ -20,6 +20,24 @@ async def get_stock(symbol: str):
 			detail=f"Lookup failed: {str(e)}"
 		)
 
+@app.get("/api/v1/stock/{symbol}/{field}")
+async def get_stock_field(symbol: str, field: str):
+    try:
+        ticker = yf.Ticker(symbol)
+        info = ticker.info
+        if field in info:
+            return {field: info[field]}
+        else:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Field '{field}' not found for symbol '{symbol}'"
+            )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Lookup failed: {str(e)}"
+        )
+
 @app.get("/api/v1/company/{company}")
 async def get_symbol(company: str):
 	try:
@@ -37,6 +55,8 @@ async def get_symbol(company: str):
 			status_code=500,
 			detail=f"Lookup failed: {str(e)}"
 		)
+
+
 
 if __name__ == "__main__":
 	import uvicorn
