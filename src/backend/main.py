@@ -10,7 +10,9 @@ async def read_root():
 
 @app.get("/api/v1/stock/{symbol}")
 async def get_stock(symbol: str):
-	return {"symbol": symbol, "price": 100.0}
+	dat = yf.Ticker(symbol)
+	# add caching here for fewer API calls
+	return dat.info
 
 
 
