@@ -1,8 +1,0 @@
-services:
-  api:
-    build: ./api
-    volumes:
-      - ./api:/app
-    environment:
-      - MONGO_DB=db
-      - MONGO_PORT=27020
