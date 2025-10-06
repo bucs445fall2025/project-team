@@ -2,7 +2,7 @@
 
 *note: replace anything surrounded by << >> and **remove** the << >>*
 
-**Attended**: Everybody
+**Attended**: Brendon Paolino, Michael Zheng, Gavin Suber
 
 **DATE**:10/6/2025
 
@@ -27,40 +27,37 @@ grabbing stock data
 None
 
 ### The summary of the entire project
-
+Stock tracker / future price prediction
 
 ***
 
 ## Sprint Planning
 
 ## Requirements Flex
-
-<< # >>/3 requirement flexes remaining
+N/A
 
 ## Technical Debt
+N/A
 
-<< Any requirements from the previous sprint that are using a technical flex >>
 
 ### Requirement Target
-
-<< The corresponding SRS requirement that our team will be complete in next sprint >>
+Create a database with the ability to store/read using python
 
 ### User Stories
-
-<< Corresponding User Stories >>
+store the predicted stock values, user information on the database
 
 ### Planning
-
-<< Our team's detailed plan to complete the sprint >>
+Meet online throughout the week to complete requirement
 
 ### Action Items
+Create a basic database
 
-<< A list of things that need to happen in our for our team to complete the sprint >>
+Set up python to read/write to DB
 
 ### Issues and Risks
-
-<< A list of potential obstacles that could keep us from completing the sprint and what's being done about them >>
+N/A
 
 ### Team Work Assignments
-
-<< A list of each team member and their works assignments for this sprint >>
+Create database -Brendon Paolino, Michael Zheng, Gavin Suber
+Create Python Read DB - Brendon Paolino, Michael Zheng, Gavin Suber
+Python Write DB - Brendon Paolino, Michael Zheng, Gavin Suber
