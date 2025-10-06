@@ -18,19 +18,16 @@ Updated the requirements section
 temp_user_story.md
 
 ### Sprint Requirements Attempted
-
+grabbing stock data
 
 ### Completed Requirements
-
-<< The work that's been completed in this sprint >>
+grabbing stock data 
 
 ### Incomplete Requirements
-
-<< The work that has not been completed in this sprint. Be VERY detailed and specific regarding what isn't working and what needs to be completed >>
+None
 
 ### The summary of the entire project
 
-<< A general overview of the entire project >>
 
 ***
 
