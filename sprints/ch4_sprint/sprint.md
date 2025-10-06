@@ -2,7 +2,7 @@
 
 *note: replace anything surrounded by << >> and **remove** the << >>*
 
-**Attended**: << record the team members in attendance (virtual counts as long as they are participating) >>
+**Attended**: 
 
 **DATE**: << meeting date >>
 
