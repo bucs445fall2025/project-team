@@ -2,17 +2,17 @@
 
 *note: replace anything surrounded by << >> and **remove** the << >>*
 
-**Attended**: 
+**Attended**: Everybody
 
-**DATE**: << meeting date >>
+**DATE**:10/6/2025
 
 ***
 
 ## Sprint Review
 
 ### SRS Sections Updated
+Updated the requirements section
 
-<< List any SRS sections that were updated in the last sprint >>
 
 ### User Story
 
