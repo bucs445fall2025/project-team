@@ -15,12 +15,10 @@ Updated the requirements section
 
 
 ### User Story
-
-<< Corresponding User Stories completed in this sprint >>
+temp_user_story.md
 
 ### Sprint Requirements Attempted
 
-<< The corresponding SRS requirement that the team completed in the last sprint >>
 
 ### Completed Requirements
 
