@@ -1,3 +1,5 @@
 fastapi
 yfinance
 uvicorn
+mysql-connector-python
+dotenv
