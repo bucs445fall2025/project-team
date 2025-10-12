@@ -3,3 +3,4 @@ yfinance
 uvicorn
 mysql-connector-python
 dotenv
+cachetools
