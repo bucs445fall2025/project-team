@@ -13,7 +13,7 @@ db = None
 
 app = FastAPI()
 
-_my_cache = TTLCache(maxsize=128, ttl=30)
+_yf_api_cache = TTLCache(maxsize=128, ttl=30)
 
 def get_db_connection():
 	try:
@@ -34,7 +34,7 @@ def get_db_connection():
 async def read_root():
 	return "Hello World"
 
-@cached(cache=_my_cache)
+@cached(cache=_yf_api_cache)
 @app.get("/api/v1/stock/{symbol}")
 async def get_stock(symbol: str):
 	try:
@@ -47,7 +47,7 @@ async def get_stock(symbol: str):
 			detail=f"Lookup failed: {str(e)}"
 		)
 
-@cached(cache=_my_cache)
+@cached(cache=_yf_api_cache)
 @app.get("/api/v1/stock/{symbol}/{field}")
 async def get_stock_field(symbol: str, field: str):
 	try:
@@ -66,7 +66,7 @@ async def get_stock_field(symbol: str, field: str):
 			detail=f"Lookup failed: {str(e)}"
 		)
 
-@cached(cache=_my_cache)
+@cached(cache=_yf_api_cache)
 @app.get("/api/v1/company/{company}")
 async def get_symbol(company: str):
 	try:
