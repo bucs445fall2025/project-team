@@ -39,7 +39,6 @@ async def read_root():
 async def get_stock(symbol: str):
 	try:
 		dat = yf.Ticker(symbol)
-		# add caching here for fewer API calls
 		return dat.info
 	except Exception as e:
 		raise HTTPException(
