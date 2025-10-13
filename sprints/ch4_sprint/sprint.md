@@ -8,7 +8,7 @@
 
 ***
 
-## Sprint Review
+## Sprint 1 Review
 
 ### SRS Sections Updated
 Updated the requirements section
@@ -31,7 +31,7 @@ Stock tracker / future price prediction
 
 ***
 
-## Sprint Planning
+## Sprint 2 Planning
 
 ## Requirements Flex
 N/A
