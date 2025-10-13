@@ -59,7 +59,7 @@
 
 ### Planning
 
-<< Our team's detailed plan to complete the sprint >>
+- Train a linear regression model on daily stock data. This model will use daily post-Covid data to predict the next day's stock value. This will be our most basic model, so it is expected to be completed during this week's sprint alone.
 
 ### Action Items
 
@@ -67,7 +67,7 @@
 
 ### Issues and Risks
 
-<< A list of potential obstacles that could keep us from completing the sprint and what's being done about them >>
+- Compute time could be an issue. Our GPUs only include a 3070-Laptop and a 3060-Desktop.
 
 ### Team Work Assignments
 
