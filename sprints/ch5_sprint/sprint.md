@@ -71,4 +71,8 @@
 
 ### Team Work Assignments
 
-- Linear regression model: Brendon, Michael, Gavin
+- Linear regression model: Brendon
+- Work on getting homepage done for website: Michael
+- Work with brendon on figuring out how to store the results of the linear regression model: Gavin
+- Setting up api calls to new database: Gavin
+- Organize python classes: Brendon, Gavin, Michael
