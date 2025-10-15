@@ -13,6 +13,9 @@ class LinearRegression(torch.nn.Module):
 
 	def forward(self, x):
 		return self.linear(x)
+
+	def populate(self, sample_count=500):
+		return
 	
 yf_model = LinearRegression()
 
@@ -20,11 +23,7 @@ loss_f = torch.nn.MSELoss(size_average=False)
 optimizer = torch.optim.SGD(yf_model.parameters(), lr=.01)
 
 
-def populate(sample_count):
-	return
-
-x_data = populate()
-y_data = {}
+x_data, y_data = yf_model.populate()
 for epoch in range(MAX_ITER):
 	pred_y = yf_model(x_data)
 	loss = loss_f(pred_y, y_data)
