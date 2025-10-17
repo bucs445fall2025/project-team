@@ -11,7 +11,18 @@ TICKER = "AAPL"
 INTERVAL = 50
 SAMPLE_COUNT = 500
 TRAIN_RATIO = 0.8
-PATIENCE = 50
+PATIENCE = 100
+GPU_TRAIN = False
+
+device = torch.device("cpu")
+# gpu support
+if GPU_TRAIN:
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print("CUDA available:", torch.cuda.is_available())
+    print("Device:", torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+    print("GPU name:", torch.cuda.get_device_name(0) if torch.cuda.is_available() else "CPU only")
+else:
+    print("CPU only")
 
 class LinearRegression(nn.Module):
     def __init__(self):
@@ -47,7 +58,7 @@ class LinearRegression(nn.Module):
         X_tensor = (X_tensor - X_mean) / X_std
         return X_tensor, y_tensor
 
-model = LinearRegression()
+model = LinearRegression().to(device)
 loss_fn = nn.MSELoss()
 optimizer = optim.SGD(model.parameters(), lr=LR)
 X, y = model.populate()
@@ -73,6 +84,7 @@ for epoch in range(MAX_ITER):
 	# Train Set
     model.train()
     for X_batch, y_batch in train_loader:
+        X_batch, y_batch = X_batch.to(device), y_batch.to(device)
         optimizer.zero_grad()
         pred = model(X_batch)
         loss = loss_fn(pred, y_batch)
@@ -83,6 +95,7 @@ for epoch in range(MAX_ITER):
     test_loss_total = 0.0
     with torch.no_grad():
         for X_batch, y_batch in test_loader:
+            X_batch, y_batch = X_batch.to(device), y_batch.to(device)
             test_pred = model(X_batch)
             test_loss_total += loss_fn(test_pred, y_batch).item() * X_batch.size(0)
     test_loss_avg = test_loss_total / len(y_test)
@@ -95,7 +108,7 @@ for epoch in range(MAX_ITER):
         if epochs_no_improve >= PATIENCE:
             early_stop = True
 
-    if epoch % 50 == 0 or early_stop:
+    if epoch % PATIENCE == 0 or early_stop:
         print(f"Epoch {epoch}: Test Loss = {test_loss_avg:.4f}")
 
 print("Training complete. Best Test Loss:", best_loss)
