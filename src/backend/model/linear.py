@@ -22,7 +22,7 @@ if GPU_TRAIN:
     print("Device:", torch.device("cuda" if torch.cuda.is_available() else "cpu"))
     print("GPU name:", torch.cuda.get_device_name(0) if torch.cuda.is_available() else "CPU only")
 else:
-    print("CPU only")
+    print("GPU training disabled, using CPU only")
 
 class LinearRegression(nn.Module):
     def __init__(self):
