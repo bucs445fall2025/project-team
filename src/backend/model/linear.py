@@ -68,6 +68,11 @@ X, y = model.populate()
 split_idx = int(len(X) * TRAIN_RATIO)
 X_train, X_test = X[:split_idx], X[split_idx:]
 y_train, y_test = y[:split_idx], y[split_idx:]
+# Y normalization
+y_mean = y_train.mean(dim=0, keepdim=True)
+y_std = y_train.std(dim=0, keepdim=True)
+y_train_scaled = (y_train - y_mean) / y_std
+y_test_scaled = (y_test - y_mean) / y_std
 
 # DataLoaders
 train_loader = DataLoader(TensorDataset(X_train, y_train), batch_size=BATCH_SIZE, shuffle=True)
