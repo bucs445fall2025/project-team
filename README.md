@@ -1,10 +1,14 @@
 # << Project Title >>
 ## CS 445 Final Project
-### << Semester, Year >>
+### << Fall, 2025 >>
 
-### Team: << team name >>
-<< List Team Members >>
+### Team: 😃
+- Brendon Paolino
+- Michael Zheng
+- Gavin Suber
 
+### Software Requirement Specification
+[Link to google doc here](https://docs.google.com/document/d/1DFohPjYLa29_scmMElGaCI5ZswPOue50vu_ada64PMI/edit?usp=drivesdk)
 ## Getting Started
 <<One paragraph of project description goes here>>
 
