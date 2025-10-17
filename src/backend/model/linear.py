@@ -9,10 +9,11 @@ LR = 0.001
 BATCH_SIZE = 32
 TICKER = "AAPL"
 INTERVAL = 50
-SAMPLE_COUNT = 500
+SAMPLE_COUNT = 1000
 TRAIN_RATIO = 0.8
 PATIENCE = 100
 GPU_TRAIN = False
+MOMENTUM = 0.9
 
 device = torch.device("cpu")
 # gpu support
@@ -60,7 +61,7 @@ class LinearRegression(nn.Module):
 
 model = LinearRegression().to(device)
 loss_fn = nn.MSELoss()
-optimizer = optim.SGD(model.parameters(), lr=LR)
+optimizer = optim.SGD(model.parameters(), lr=LR, momentum=MOMENTUM)
 X, y = model.populate()
 
 # Train/test split
