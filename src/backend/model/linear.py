@@ -75,8 +75,8 @@ y_train_scaled = (y_train - y_mean) / y_std
 y_test_scaled = (y_test - y_mean) / y_std
 
 # DataLoaders
-train_loader = DataLoader(TensorDataset(X_train, y_train), batch_size=BATCH_SIZE, shuffle=True)
-test_loader = DataLoader(TensorDataset(X_test, y_test), batch_size=BATCH_SIZE)
+train_loader = DataLoader(TensorDataset(X_train, y_train_scaled), batch_size=BATCH_SIZE, shuffle=True)
+test_loader = DataLoader(TensorDataset(X_test, y_test_scaled), batch_size=BATCH_SIZE)
 
 # Early Stopping
 best_loss = float('inf')
