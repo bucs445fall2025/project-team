@@ -6,6 +6,7 @@ from mysql.connector import Error
 from dotenv import load_dotenv
 import os
 from cachetools import cached, TTLCache
+from db import insert_prediction
 
 load_dotenv()
 
@@ -14,6 +15,16 @@ db = None
 app = FastAPI()
 
 _yf_api_cache = TTLCache(maxsize=128, ttl=30)
+## ================================================================ Database Interfacing ================================================================ ##
+
+def test_insert_prediction():
+	ticker = "AAPL"
+	prediction_data = 150
+	success = insert_prediction(ticker, prediction_data)
+	if success:
+		print("Insertion successful")
+	else:
+		print("Insertion failed")
 
 def get_db_connection():
 	try:
@@ -29,6 +40,7 @@ def get_db_connection():
 		print(e)
 		raise HTTPException(status_code=500, detail="Could not connect to database")
 
+## ================================================================#####################================================================================ ##
 
 @app.get("/")
 async def read_root():
