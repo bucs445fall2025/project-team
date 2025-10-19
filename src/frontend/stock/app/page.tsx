@@ -1,6 +1,8 @@
 "use client";
 import { useState } from 'react';
+import { useRouter } from 'next/navigation'
 import { TrendingUp, BarChart3, Search, Shield, Zap, Bell } from 'lucide-react';
+import Logo from '@/components/logo';
 
 export default function StockAnalysisLanding() {
 	const [email, setEmail] = useState('');
@@ -14,21 +16,22 @@ export default function StockAnalysisLanding() {
 		console.log('Searching for:', ticker);
 	};
 
+	const router = useRouter();
+
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
 			<nav className="border-b border-white/10 bg-slate-900/50 backdrop-blur-sm">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 					<div className="flex justify-between items-center h-16">
-						<div className="flex items-center space-x-2">
-							<TrendingUp className="w-8 h-8 text-blue-400" />
-							<span className="text-xl font-bold text-white">StockIQ</span>
-						</div>
+						<Logo />
 						<div className="hidden md:flex space-x-8">
 							<a href="#features" className="text-gray-300 hover:text-white transition">Features</a>
 							<a href="#pricing" className="text-gray-300 hover:text-white transition">Pricing</a>
 							<a href="#about" className="text-gray-300 hover:text-white transition">About</a>
 						</div>
-						<button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition">
+						<button 
+						onClick={() => router.push('/login')}
+						className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition">
 							Sign In
 						</button>
 					</div>
