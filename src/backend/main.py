@@ -86,7 +86,7 @@ async def get_symbol(company: str):
 		if df.empty:
 			raise HTTPException(
 				status_code=404,
-				detail=f"No comapny found for '{company}"
+				detail=f"No company found for '{company}"
 			)
 		symbol = df.index.item()
 		return {"symbol":symbol}
