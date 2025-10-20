@@ -70,21 +70,9 @@ class LinearRegression(nn.Module):
         close_price = (stock_info.get("currentPrice") or 
                       stock_info.get("regularMarketPrice") or 
                       stock_info.get("previousClose"))
-        
         if close_price is None:
             raise ValueError("Could not retrieve close price from API")
-        
         return close_price
-    
-    def _get_nearest_date(self, df, target_date):
-        target_date_ts = pd.Timestamp(target_date)
-        
-        if target_date_ts not in df.index:
-            nearest_idx = df.index.get_indexer([target_date_ts], method='nearest')[0]
-            target_date_ts = df.index[nearest_idx]
-            print(f"Using nearest date: {target_date_ts}")
-        
-        return target_date_ts
     
     def _prepare_features(self, date_num, distance, close_price):
         x_input = torch.tensor([[date_num, distance, close_price]], dtype=torch.float32)
@@ -120,13 +108,17 @@ class LinearRegression(nn.Module):
             raise ValueError("Model must be populated before making predictions")
         if self.reference_date is None:
             raise ValueError("Reference date not set. Run populate() first.")
+        target_date_ts = pd.Timestamp(target_date)
         try:
             close_price = self._fetch_close_price_from_api(symbol)
             df = get_moving_average(symbol, interval)
-            target_date_ts = self._get_nearest_date(df, target_date)
-            sma = df.loc[target_date_ts, (f"{interval}-Day SMA", "")]
-            distance = close_price - sma
+            if df.empty:
+                raise ValueError("No historical data available to calculate SMA.")
+            latest_sma = df.iloc[-1][(f"{interval}-Day SMA", "")]
+            print(f"Using latest SMA ({df.index[-1].strftime('%Y-%m-%d')}): {latest_sma:.2f}")
+            distance = close_price - latest_sma
             date_num = (target_date_ts - self.reference_date).days
+            print(f"Predicting for date: {target_date}, DateNum: {date_num}")
             x_normalized = self._prepare_features(date_num, distance, close_price)
             self.eval()
             with torch.no_grad():
@@ -198,5 +190,5 @@ test_loader = DataLoader(
 
 train_model(model, train_loader, test_loader, y_test)
 
-predicted_price = model.predict(symbol="AAPL", target_date="2025-10-20")
+predicted_price = model.predict(symbol="AAPL", target_date="2025-10-21")
 print(f"Predicted next day close: ${predicted_price:.2f}")
