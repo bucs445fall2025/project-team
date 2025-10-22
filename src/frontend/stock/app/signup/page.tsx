@@ -39,6 +39,7 @@ export default function SignUp() {
 
 	const handleSignUp = () => {
 		setIsLoading(true);
+		// TODO: Add api endpoint to signup on server
 		console.log('Sign up attempt:', {
 			firstName,
 			lastName,
@@ -94,7 +95,7 @@ export default function SignUp() {
 							</label>
 							<input
 								type="text"
-								placeholder="John"
+								placeholder="First"
 								value={firstName}
 								onChange={(e) => setFirstName(e.target.value)}
 								className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
@@ -108,7 +109,7 @@ export default function SignUp() {
 							</label>
 							<input
 								type="text"
-								placeholder="Doe"
+								placeholder="Last"
 								value={lastName}
 								onChange={(e) => setLastName(e.target.value)}
 								className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
@@ -122,7 +123,7 @@ export default function SignUp() {
 							</label>
 							<input
 								type="email"
-								placeholder="john@example.com"
+								placeholder="email@email.com"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
 								className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"

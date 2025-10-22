@@ -11,6 +11,7 @@ export default function Login() {
 
 	const handleLogin = () => {
 		setIsLoading(true);
+		// TODO: Add api endpoint to login on server
 		console.log('Login attempt:', { username, password });
 		setTimeout(() => setIsLoading(false), 1000);
 	};
