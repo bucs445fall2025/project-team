@@ -1,19 +1,48 @@
 "use client"
 import { useState } from 'react';
-import { TrendingUp, Eye, EyeOff } from 'lucide-react';
+import { TrendingUp, Eye, EyeOff, X } from 'lucide-react';
 import Logo from '@/components/logo';
 
 export default function Login() {
-	const [username, setUsername] = useState('');
+	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [showPassword, setShowPassword] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [loginError, setLoginError] = useState(false);
 
-	const handleLogin = () => {
+	const handleLogin = async () => {
 		setIsLoading(true);
-		// TODO: Add api endpoint to login on server
-		console.log('Login attempt:', { username, password });
-		setTimeout(() => setIsLoading(false), 1000);
+		setLoginError(false);
+
+		try {
+			const response = await fetch('http://localhost:8000/api/auth/login', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					email: email,
+					password: password,
+				}),
+			});
+
+			if (response.status === 401) {
+				setLoginError(true);
+			} else if (response.ok) {
+				const data = await response.json();
+
+				document.cookie = `token=${data}; path=/; max-age=${60 * 60 * 24 * 7}`; // 7 days
+
+				window.location.href = '/home';
+			} else {
+				setLoginError(true);
+			}
+		} catch (error) {
+			console.error('Login error:', error);
+			setLoginError(true);
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	const handleSignUp = () => {
@@ -44,16 +73,26 @@ export default function Login() {
 
 					{/* Form */}
 					<div className="space-y-5">
-						{/* Username */}
+						{/* Error Message */}
+						{loginError && (
+							<div className="flex items-center space-x-3 p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
+								<X className="w-5 h-5 text-red-400 flex-shrink-0" />
+								<p className="text-red-400 text-sm font-medium">
+									Email or password is incorrect
+								</p>
+							</div>
+						)}
+
+						{/* Email */}
 						<div>
 							<label className="block text-sm font-medium text-gray-300 mb-2">
-								Username or Email
+								Email
 							</label>
 							<input
-								type="text"
-								placeholder="Enter your username or email"
-								value={username}
-								onChange={(e) => setUsername(e.target.value)}
+								type="email"
+								placeholder="Enter your email"
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
 								onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
 								className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
 							/>
@@ -100,7 +139,7 @@ export default function Login() {
 						{/* Login Button */}
 						<button
 							onClick={handleLogin}
-							disabled={isLoading || !username || !password}
+							disabled={isLoading || !email || !password}
 							className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 disabled:from-gray-600 disabled:to-gray-600 text-white font-semibold rounded-lg transition disabled:cursor-not-allowed"
 						>
 							{isLoading ? 'Signing in...' : 'Sign In'}

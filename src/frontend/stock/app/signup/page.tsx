@@ -14,6 +14,7 @@ export default function SignUp() {
 	const [agreeTerms, setAgreeTerms] = useState(false);
 	const [newsletter, setNewsletter] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [signupStatus, setSignupStatus] = useState<'success' | 'error' | null>(null);
 
 	const passwordRequirements = {
 		length: password.length >= 8,
@@ -37,18 +38,39 @@ export default function SignUp() {
 
 	const { strength, label, color } = getPasswordStrength();
 
-	const handleSignUp = () => {
+	const handleSignUp = async () => {
 		setIsLoading(true);
-		// TODO: Add api endpoint to signup on server
-		console.log('Sign up attempt:', {
-			firstName,
-			lastName,
-			email,
-			password,
-			agreeTerms,
-			newsletter,
-		});
-		setTimeout(() => setIsLoading(false), 1000);
+		setSignupStatus(null);
+		console.log("after everytinng")
+		try {
+			const response = await fetch('http://localhost:8000/api/auth/signup', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					first: firstName,
+					last: lastName,
+					email: email,
+					password: password,
+				}),
+			});
+
+			if (response.ok) {
+				const data = await response.json();
+				console.log('Sign up successful:', data);
+				setSignupStatus('success');
+			} else {
+				const error = await response.json();
+				console.error('Sign up failed:', error);
+				setSignupStatus('error');
+			}
+		} catch (error) {
+			console.error('Sign up error:', error);
+			setSignupStatus('error');
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	const handleLogin = () => {
@@ -83,11 +105,30 @@ export default function SignUp() {
 					{/* Heading */}
 					<div className="text-center mb-8">
 						<h1 className="text-3xl font-bold text-white mb-2">Create Account</h1>
-						<p className="text-gray-400">Join thousands of smart investors</p>
+						<p className="text-gray-400">Dont let Congress win!</p>
 					</div>
 
 					{/* Form */}
 					<div className="space-y-4">
+						{/* Status Messages */}
+						{signupStatus === 'success' && (
+							<div className="flex items-center space-x-3 p-4 bg-green-500/20 border border-green-500/50 rounded-lg">
+								<Check className="w-5 h-5 text-green-400 flex-shrink-0" />
+								<p className="text-green-400 text-sm font-medium">
+									User created, go log in!
+								</p>
+							</div>
+						)}
+
+						{signupStatus === 'error' && (
+							<div className="flex items-center space-x-3 p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
+								<X className="w-5 h-5 text-red-400 flex-shrink-0" />
+								<p className="text-red-400 text-sm font-medium">
+									User creation error, please try again or contact support
+								</p>
+							</div>
+						)}
+
 						{/* First Name */}
 						<div>
 							<label className="block text-sm font-medium text-gray-300 mb-2">
@@ -195,10 +236,10 @@ export default function SignUp() {
 									value={retypePassword}
 									onChange={(e) => setRetypePassword(e.target.value)}
 									className={`w-full px-4 py-3 rounded-lg bg-white/10 border transition pr-12 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent ${retypePassword
-											? passwordsMatch
-												? 'border-green-500/50 focus:ring-green-500'
-												: 'border-red-500/50 focus:ring-red-500'
-											: 'border-white/20 focus:ring-blue-500'
+										? passwordsMatch
+											? 'border-green-500/50 focus:ring-green-500'
+											: 'border-red-500/50 focus:ring-red-500'
+										: 'border-white/20 focus:ring-blue-500'
 										}`}
 								/>
 								<button
@@ -230,11 +271,11 @@ export default function SignUp() {
 								/>
 								<span className="text-sm text-gray-400">
 									I agree to the{' '}
-									<a href="#" className="text-blue-400 hover:text-blue-300 transition">
+									<a href="/legal/terms-and-service" className="text-blue-400 hover:text-blue-300 transition">
 										Terms and Services
 									</a>{' '}
 									and{' '}
-									<a href="#" className="text-blue-400 hover:text-blue-300 transition">
+									<a href="/legal/privacy-policy" className="text-blue-400 hover:text-blue-300 transition">
 										Privacy Policy
 									</a>
 									<span className="text-red-400">*</span>
@@ -250,7 +291,7 @@ export default function SignUp() {
 									className="mt-1 w-4 h-4 rounded bg-white/10 border border-white/20 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer"
 								/>
 								<span className="text-sm text-gray-400">
-									Send me emails about stock tips, analysis, and market updates
+									Send me emails about my elected politician's trades, as well as anything else we consider important
 								</span>
 							</label>
 						</div>

@@ -6,3 +6,4 @@ dotenv
 cachetools
 pandas
 numpy>=1.24,<2
+pyjwt

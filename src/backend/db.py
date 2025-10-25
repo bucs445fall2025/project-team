@@ -5,25 +5,22 @@ import os
 from datetime import datetime, timedelta
 load_dotenv()
 
+
 def get_db_connection():
     try:
-        port = int(os.getenv("DATABASE_PORT", "3306"))
-        conn = mysql.connector.connect(
+        session = mysql.connector.connect(
             user=os.getenv("DATABASE_USERNAME"),
             password=os.getenv("DATABASE_PASSWORD"),
-            host=os.getenv("DATABASE_HOST", "localhost"),
-            database=os.getenv("DATABASE_NAME") or os.getenv("DATABASE_BASE"),
-            port=port,
+            host="db.chinny.net",
+            database=os.getenv("DATABASE_BASE"),
+            port=3306,
         )
-        if conn.is_connected():
-            return conn
-        else: 
-            print("Failed to connect to database")
-            return None
+        return session
     except Error as e:
-        print(f"DB connection error: {e}")
-        return None
-    
+        print(e)
+        raise HTTPException(status_code=500, detail="Could not connect to database")
+
+
 def insert_prediction (ticker: str, prediction_data: int):
     conn = get_db_connection()
     if conn is None:
@@ -50,7 +47,7 @@ def insert_prediction (ticker: str, prediction_data: int):
     except Error as e:
         print(f"DB insertion error: {e}")
         raise Exception("Failed to insert prediction")
-    
+
 if __name__ == "__main__":
     # Simple test
     msg = insert_prediction("NVDA", 100000)

@@ -1,18 +1,31 @@
 from fastapi import FastAPI, HTTPException
 import yfinance as yf
-
-import mysql.connector
-from mysql.connector import Error
 from dotenv import load_dotenv
-import os
 from cachetools import cached, TTLCache
-from db import insert_prediction
+from db import insert_prediction, get_db_connection
+from fastapi.middleware.cors import CORSMiddleware
+
+from routers.auth import router as auth_router
 
 load_dotenv()
 
 db = None
 
 app = FastAPI()
+
+app.include_router(auth_router, prefix="/api")
+
+origins = [
+		"http://localhost:3000"
+    ]
+
+app.add_middleware(
+	CORSMiddleware,
+	allow_origins=origins,
+	allow_credentials=True,
+	allow_methods=["*"],  # Or specify specific methods like ["GET", "POST"]
+	allow_headers=["*"],  # Or specify specific headers like ["Authorization", "Content-Type"]
+)
 
 _yf_api_cache = TTLCache(maxsize=128, ttl=30)
 ## ================================================================ Database Interfacing ================================================================ ##
@@ -25,20 +38,6 @@ def test_insert_prediction():
 		print("Insertion successful")
 	else:
 		print("Insertion failed")
-
-def get_db_connection():
-	try:
-		session = mysql.connector.connect(
-			user=os.getenv("DATABASE_USERNAME"),
-			password=os.getenv("DATABASE_PASSWORD"),
-			host="db.chinny.net",
-			database=os.getenv("DATABASE_BASE"),
-			port=3306,
-		)
-		return session
-	except Error as e:
-		print(e)
-		raise HTTPException(status_code=500, detail="Could not connect to database")
 
 ## ================================================================#####################================================================================ ##
 
