@@ -4,11 +4,12 @@ from torch.utils.data import TensorDataset, DataLoader
 import pandas as pd
 import requests
 from utils.moving_average import get_moving_average
+from utils.save_model import save_model
 
 MAX_ITER = 10000
 LR = 0.001
 BATCH_SIZE = 32
-TICKER = "AAPL"
+TICKER = "AAPL" # will be changed in the S&P 500 loop
 INTERVAL = 50
 SAMPLE_COUNT = 1000
 TRAIN_RATIO = 0.8
@@ -16,6 +17,9 @@ PATIENCE = 100
 GPU_TRAIN = False
 MOMENTUM = 0.9
 API_BASE_URL = "http://localhost:8000"
+DIR = "cached_models/"
+FILE_EXT = ".pth"
+MODEL_TYPE = "LINEAR"
 
 device = torch.device("cpu")
 if GPU_TRAIN:
@@ -37,6 +41,16 @@ class LinearRegression(nn.Module):
         self.y_std = None
         self.api_base_url = api_base_url
         self.reference_date = None
+        self.ticker = TICKER
+        self.datenum = None
+
+    def get_dir(self):
+        return DIR + self.ticker + "_" + MODEL_TYPE + "_" + self.get_date() + FILE_EXT
+
+    def get_date(self):
+        current_date = pd.Timestamp.now().floor('D')
+        current_datenum = (current_date - self.reference_date).days
+        return current_datenum
 
     def forward(self, x):
         return self.linear(x)
@@ -190,5 +204,7 @@ test_loader = DataLoader(
 
 train_model(model, train_loader, test_loader, y_test)
 
-predicted_price = model.predict(symbol="AAPL", target_date="2025-10-21")
+predicted_price = model.predict(symbol=TICKER, target_date="2025-10-21")
 print(f"Predicted next day close: ${predicted_price:.2f}")
+
+save_model(model, model.get_dir())
