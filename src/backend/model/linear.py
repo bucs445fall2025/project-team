@@ -9,7 +9,7 @@ from utils.save_model import save_model
 MAX_ITER = 10000
 LR = 0.001
 BATCH_SIZE = 32
-TICKER = "MSFT"
+TICKER = "AAPL"
 INTERVAL = 50
 SAMPLE_COUNT = 1000
 TRAIN_RATIO = 0.8
@@ -33,7 +33,7 @@ else:
 
 
 class LinearRegression(nn.Module):
-    def __init__(self, api_base_url=API_BASE_URL):
+    def __init__(self, ticker=TICKER, api_base_url=API_BASE_URL):
         super(LinearRegression, self).__init__()
         self.linear = nn.Linear(3, 1)
         self.X_mean = None
@@ -42,8 +42,9 @@ class LinearRegression(nn.Module):
         self.y_std = None
         self.api_base_url = api_base_url
         self.reference_date = None
-        self.ticker = TICKER
+        self.ticker = ticker
         self.datenum = None
+        self.model_type = MODEL_TYPE
 
     def get_dir(self) -> str:
         return DIR + MODEL_TYPE + "/" + self.ticker + "/" + self.get_date() + FILE_EXT
@@ -70,13 +71,13 @@ class LinearRegression(nn.Module):
             return pred_normalized * self.y_std + self.y_mean
         return pred_normalized
     
-    def _fetch_close_price_from_api(self, symbol):
-        response = requests.get(f"{self.api_base_url}/api/v1/stock/{symbol}")
+    def _fetch_close_price_from_api(self):
+        response = requests.get(f"{self.api_base_url}/api/v1/stock/{self.ticker}")
         if response.status_code != 200:
             raise ValueError(f"Failed to fetch stock data: {response.text}")
         stock_info = response.json()
         close_price_response = requests.get(
-            f"{self.api_base_url}/api/v1/stock/{symbol}/currentPrice"
+            f"{self.api_base_url}/api/v1/stock/{self.ticker}/currentPrice"
         )
         if close_price_response.status_code == 200:
             return close_price_response.json()
@@ -92,9 +93,9 @@ class LinearRegression(nn.Module):
         x_normalized = (x_input - self.X_mean) / self.X_std
         return x_normalized.to(device)
 
-    def populate(self, ticker=TICKER, interval=INTERVAL, sample_count=SAMPLE_COUNT):
-        df = get_moving_average(ticker, interval)
-        close_series = df[("Close", ticker)]
+    def populate(self, interval=INTERVAL, sample_count=SAMPLE_COUNT):
+        df = get_moving_average(self.ticker, interval)
+        close_series = df[("Close", self.ticker)]
         sma_series = df[(f"{interval}-Day SMA", "")]
         distance = close_series - sma_series
         target = close_series.shift(-1)
@@ -116,15 +117,15 @@ class LinearRegression(nn.Module):
         X_tensor = self._normalize_features(X_tensor)
         return X_tensor, y_tensor
 
-    def predict(self, symbol: str, target_date: str, interval: int = INTERVAL):
+    def predict(self, target_date: str, interval: int = INTERVAL):
         if self.X_mean is None or self.X_std is None:
             raise ValueError("Model must be populated before making predictions")
         if self.reference_date is None:
             raise ValueError("Reference date not set. Run populate() first.")
         target_date_ts = pd.Timestamp(target_date)
         try:
-            close_price = self._fetch_close_price_from_api(symbol)
-            df = get_moving_average(symbol, interval)
+            close_price = self._fetch_close_price_from_api()
+            df = get_moving_average(self.ticker, interval)
             if df.empty:
                 raise ValueError("No historical data available to calculate SMA.")
             latest_sma = df.iloc[-1][(f"{interval}-Day SMA", "")]
@@ -144,7 +145,8 @@ class LinearRegression(nn.Module):
             raise ValueError(f"Prediction failed: {str(e)}")
 
 
-def train_model(model, train_loader, test_loader, y_test, epochs=MAX_ITER, patience=PATIENCE):
+def train_model(model, train_loader, test_loader, y_test, optimizer, loss_fn, 
+                epochs=MAX_ITER, patience=PATIENCE):
     best_loss = float('inf')
     epochs_no_improve = 0
     for epoch in range(epochs):
@@ -178,32 +180,36 @@ def train_model(model, train_loader, test_loader, y_test, epochs=MAX_ITER, patie
     return best_loss
 
 
-model = LinearRegression(api_base_url=API_BASE_URL).to(device)
-loss_fn = nn.MSELoss()
-optimizer = optim.SGD(model.parameters(), lr=LR, momentum=MOMENTUM)
+def create_model(ticker: str = TICKER):
+    model = LinearRegression(ticker=ticker, api_base_url=API_BASE_URL).to(device)
+    optimizer = optim.SGD(model.parameters(), lr=LR, momentum=MOMENTUM)
+    loss_fn = nn.MSELoss()
+    # Populate data
+    X, y = model.populate()
+    # Split data
+    split_idx = int(len(X) * TRAIN_RATIO)
+    X_train, X_test = X[:split_idx], X[split_idx:]
+    y_train, y_test = y[:split_idx], y[split_idx:]
+    # Normalize targets
+    y_train_scaled = model._normalize_targets(y_train)
+    y_test_scaled = (y_test - model.y_mean) / model.y_std
+    # Create data loaders
+    train_loader = DataLoader(
+        TensorDataset(X_train, y_train_scaled), 
+        batch_size=BATCH_SIZE, 
+        shuffle=True
+    )
+    test_loader = DataLoader(
+        TensorDataset(X_test, y_test_scaled), 
+        batch_size=BATCH_SIZE
+    )
+    train_model(model, train_loader, test_loader, y_test, optimizer, loss_fn)    
+    save_model(model, model.get_dir())
+    return model
 
-X, y = model.populate()
+#TESTING:
 
-split_idx = int(len(X) * TRAIN_RATIO)
-X_train, X_test = X[:split_idx], X[split_idx:]
-y_train, y_test = y[:split_idx], y[split_idx:]
-
-y_train_scaled = model._normalize_targets(y_train)
-y_test_scaled = (y_test - model.y_mean) / model.y_std
-
-train_loader = DataLoader(
-    TensorDataset(X_train, y_train_scaled), 
-    batch_size=BATCH_SIZE, 
-    shuffle=True
-)
-test_loader = DataLoader(
-    TensorDataset(X_test, y_test_scaled), 
-    batch_size=BATCH_SIZE
-)
-
-train_model(model, train_loader, test_loader, y_test)
-
-predicted_price = model.predict(symbol=TICKER, target_date="2025-11-02")
-print(f"Predicted next day close: ${predicted_price:.2f}")
-
-save_model(model, model.get_dir())
+model = create_model(TICKER)
+target_date = (pd.Timestamp.now() + pd.Timedelta(days=1)).strftime('%Y-%m-%d')
+pred = model.predict(target_date=target_date)
+print(f"Prediction for {TICKER} on {target_date}: ${pred:.2f}")
