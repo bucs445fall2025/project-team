@@ -9,7 +9,7 @@ from utils.save_model import save_model
 MAX_ITER = 10000
 LR = 0.001
 BATCH_SIZE = 32
-TICKER = "AAPL"
+TICKER = "MSFT"
 INTERVAL = 50
 SAMPLE_COUNT = 1000
 TRAIN_RATIO = 0.8
@@ -45,14 +45,11 @@ class LinearRegression(nn.Module):
         self.ticker = TICKER
         self.datenum = None
 
-    def get_dir(self):
-        return DIR + MODEL_TYPE + "/" + self.ticker + "_" + str(self.get_date()) + FILE_EXT
+    def get_dir(self) -> str:
+        return DIR + MODEL_TYPE + "/" + self.ticker + "/" + self.get_date() + FILE_EXT
 
-    def get_date(self):
-        reference_date = pd.Timestamp(REFERENCE_DATE).floor('D')
-        current_date = pd.Timestamp.now().floor('D')
-        current_datenum = (current_date - reference_date).days
-        return current_datenum
+    def get_date(self) -> str:
+        return pd.Timestamp.now().strftime('%Y-%m-%d')
 
     def forward(self, x):
         return self.linear(x)
