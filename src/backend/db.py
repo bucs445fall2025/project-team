@@ -49,7 +49,7 @@ def insert_prediction (ticker: str, prediction_data: int):
         print(f"DB insertion error: {e}")
         raise Exception("Failed to insert prediction")
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
     # Simple test
-    msg = insert_prediction("NVDA", 100000)
-    print(msg)
+#    msg = insert_prediction("NVDA", 100000)
+#    print(msg)

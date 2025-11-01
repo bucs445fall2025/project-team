@@ -9,7 +9,7 @@ from utils.save_model import save_model
 MAX_ITER = 10000
 LR = 0.001
 BATCH_SIZE = 32
-TICKER = "AAPL" # will be changed in the S&P 500 loop
+TICKER = "AAPL"
 INTERVAL = 50
 SAMPLE_COUNT = 1000
 TRAIN_RATIO = 0.8
@@ -20,6 +20,7 @@ API_BASE_URL = "http://localhost:8000"
 DIR = "cached_models/"
 FILE_EXT = ".pth"
 MODEL_TYPE = "LINEAR"
+REFERENCE_DATE = '2025-11-01'
 
 device = torch.device("cpu")
 if GPU_TRAIN:
@@ -45,11 +46,12 @@ class LinearRegression(nn.Module):
         self.datenum = None
 
     def get_dir(self):
-        return DIR + self.ticker + "_" + MODEL_TYPE + "_" + self.get_date() + FILE_EXT
+        return DIR + MODEL_TYPE + "/" + self.ticker + "_" + str(self.get_date()) + FILE_EXT
 
     def get_date(self):
+        reference_date = pd.Timestamp(REFERENCE_DATE).floor('D')
         current_date = pd.Timestamp.now().floor('D')
-        current_datenum = (current_date - self.reference_date).days
+        current_datenum = (current_date - reference_date).days
         return current_datenum
 
     def forward(self, x):
@@ -204,7 +206,7 @@ test_loader = DataLoader(
 
 train_model(model, train_loader, test_loader, y_test)
 
-predicted_price = model.predict(symbol=TICKER, target_date="2025-10-21")
+predicted_price = model.predict(symbol=TICKER, target_date="2025-11-02")
 print(f"Predicted next day close: ${predicted_price:.2f}")
 
 save_model(model, model.get_dir())
