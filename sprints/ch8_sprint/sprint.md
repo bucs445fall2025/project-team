@@ -57,7 +57,6 @@
 
 ### Planning
 
-<< Our team's detailed plan to complete the sprint >>
 - Use last sprint's data collection functions to populate our database and create graphs based on this.
 
 ### Action Items
