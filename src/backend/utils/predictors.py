@@ -21,5 +21,7 @@ def run_prediction(file_path: str, ticker: str, input: str=TARGET_DATE, device: 
 	model = load_model(file_path, ticker, device)
 	prediction = model.predict(input)
 	print(f"[{file_path[len(DIR):]}] Prediction for {input}: ${prediction:.2f}")
-	#db.insert_prediction(ticker, prediction)
-	
+	try:
+		db.insert_prediction(ticker, prediction)
+	except Exception as e:
+		print(f"Error while posting to database: {e}")

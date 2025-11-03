@@ -26,7 +26,6 @@ def insert_prediction (ticker: str, prediction_data: int):
     conn = get_db_connection()
     if conn is None:
         raise Exception("Database connection failed")
-        return False
     try:
 
         cursor = conn.cursor(dictionary=True)
