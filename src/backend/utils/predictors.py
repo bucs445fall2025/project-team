@@ -1,7 +1,7 @@
-from load_model import load_model
 import os
 import pandas as pd
-from .. import db
+import db
+from utils.load_model import load_model
 
 DIR = "cached_models/"
 MODEL_TYPE = "LINEAR"
@@ -18,7 +18,8 @@ def run_all_predictions(file_path: str=DIR, input: str=TARGET_DATE, model_type: 
 
 
 def run_prediction(file_path: str, ticker: str, input: str=TARGET_DATE, device: str="cpu"):
-	model = load_model(file_path, device)
+	model = load_model(file_path, ticker, device)
 	prediction = model.predict(input)
-	db.insert_prediction(ticker, prediction)
+	print(f"[{file_path[len(DIR):]}] Prediction for {input}: ${prediction:.2f}")
+	#db.insert_prediction(ticker, prediction)
 	

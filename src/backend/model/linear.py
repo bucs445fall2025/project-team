@@ -23,13 +23,14 @@ MODEL_TYPE = "LINEAR"
 REFERENCE_DATE = '2025-11-01'
 
 device = torch.device("cpu")
-if GPU_TRAIN:
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print("CUDA available:", torch.cuda.is_available())
-    print("Device:", device)
-    print("GPU name:", torch.cuda.get_device_name(0) if torch.cuda.is_available() else "CPU only")
-else:
-    print("GPU training disabled, using CPU only")
+if __name__ == "__main__":
+    if GPU_TRAIN:
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        print("CUDA available:", torch.cuda.is_available())
+        print("Device:", device)
+        print("GPU name:", torch.cuda.get_device_name(0) if torch.cuda.is_available() else "CPU only")
+    else:
+        print("GPU training disabled, using CPU only")
 
 
 class LinearRegression(nn.Module):
@@ -129,10 +130,10 @@ class LinearRegression(nn.Module):
             if df.empty:
                 raise ValueError("No historical data available to calculate SMA.")
             latest_sma = df.iloc[-1][(f"{interval}-Day SMA", "")]
-            print(f"Using latest SMA ({df.index[-1].strftime('%Y-%m-%d')}): {latest_sma:.2f}")
+            #print(f"Using latest SMA ({df.index[-1].strftime('%Y-%m-%d')}): {latest_sma:.2f}")
             distance = close_price - latest_sma
             date_num = (target_date_ts - self.reference_date).days
-            print(f"Predicting for date: {target_date}, DateNum: {date_num}")
+            #print(f"Predicting for date: {target_date}, DateNum: {date_num}")
             x_normalized = self._prepare_features(date_num, distance, close_price)
             self.eval()
             with torch.no_grad():
@@ -208,8 +209,8 @@ def create_model(ticker: str = TICKER):
     return model
 
 #TESTING:
-
-model = create_model(TICKER)
-target_date = (pd.Timestamp.now() + pd.Timedelta(days=1)).strftime('%Y-%m-%d')
-pred = model.predict(target_date=target_date)
-print(f"Prediction for {TICKER} on {target_date}: ${pred:.2f}")
+if __name__ == "__main__":
+    model = create_model(TICKER)
+    target_date = (pd.Timestamp.now() + pd.Timedelta(days=1)).strftime('%Y-%m-%d')
+    pred = model.predict(target_date=target_date)
+    print(f"Prediction for {TICKER} on {target_date}: ${pred:.2f}")

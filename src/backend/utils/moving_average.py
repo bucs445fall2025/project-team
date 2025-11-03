@@ -10,4 +10,4 @@ def get_moving_average(ticker: str, interval: int=50):
 	data[f'{interval}-Day SMA'] = data['Close'].rolling(window=interval).mean()
 	return data[['Close', f'{interval}-Day SMA']].dropna()
 
-print(get_moving_average("AAPL"))
+#print(get_moving_average("AAPL"))
