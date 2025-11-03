@@ -2,37 +2,37 @@
 
 *note: replace anything surrounded by << >> and **remove** the << >>*
 
-**Attended**: << record the team members in attendance (virtual counts as long as they are participating) >>
+**Attended**: Brendon, Michael, Gavin
 
-**DATE**: << meeting date >>
+**DATE**: 11/2/25
 
 ***
 
-## Sprint << num >> Review
+## Sprint 5 Review
 
 ### SRS Sections Updated
 
-<< List any SRS sections that were updated in the last sprint >>
+- Requirements
 
 ### User Story
 
-<< Corresponding User Stories completed in this sprint >>
+- temp_user_story.md
 
 ### Sprint Requirements Attempted
 
-<< The corresponding SRS requirement that the team completed in the last sprint >>
+- Data analysis
 
 ### Completed Requirements
 
-<< The work that's been completed in this sprint >>
+- Prediction History
 
 ### Incomplete Requirements
 
-<< The work that has not been completed in this sprint. Be VERY detailed and specific regarding what isn't working and what needs to be completed >>
+- N/A
 
 ### The summary of the entire project
 
-<< A general overview of the entire project >>
+- Stock tracker / future price prediction
 
 ***
 
@@ -40,32 +40,36 @@
 
 ## Requirements Flex
 
-<< # >>/5 requirement flexes remaining
+5/5 requirement flexes remaining
 
 ## Technical Debt
 
-<< Any requirements from the previous sprint that are using a technical flex >>
+- N/A
 
 ### Requirement Target
 
-<< The corresponding SRS requirement that our team will be complete in next sprint >>
+- Data analysis
+- Update website automatically
 
 ### User Stories
 
-<< Corresponding User Stories >>
+- temp_user_story.md
 
 ### Planning
 
 << Our team's detailed plan to complete the sprint >>
+- Use last sprint's data collection functions to populate our database and create graphs based on this.
 
 ### Action Items
 
-<< A list of things that need to happen in our for our team to complete the sprint >>
+- Populate the database
+- Add graphs contrasting true stock price to predicted price
 
 ### Issues and Risks
 
-<< A list of potential obstacles that could keep us from completing the sprint and what's being done about them >>
+- Computation power when training/predicting on all 500 companies in the S&P500
 
 ### Team Work Assignments
 
-<< A list of each team member and their works assignments for this sprint >>
+- Populate the database: Brendon, Gavin
+- Add graphs to the website: Michael
