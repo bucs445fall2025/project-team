@@ -1,8 +1,12 @@
 "use client"
 import { useState, useEffect } from 'react'
 import { TrendingUp } from 'lucide-react'
+import SearchBar from '@/components/home_page/search-bar'
+import MarketOverview from '@/components/home_page/market-overview'
+import MarketNews from '@/components/home_page/market-news'
+import Watchlist from '@/components/home_page/watchlist'
 
-export default function HomePage() {
+export default function Header() {
 	const [firstName, setFirstName] = useState('')
 
 	useEffect(() => {
@@ -44,32 +48,20 @@ export default function HomePage() {
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-			{/* Background elements */}
-			<div className="fixed top-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
-			<div className="fixed bottom-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-			{/* Toolbar */}
-			<div className="relative z-10 bg-white/5 backdrop-blur-xl border-b border-white/10">
-				<div className="flex items-center justify-between px-6 py-4">
-					{/* Logo */}
-					<div className="flex items-center space-x-2">
-						<div className="bg-gradient-to-br from-blue-500 to-cyan-500 p-2 rounded-lg">
-							<TrendingUp className="w-6 h-6 text-white" />
-						</div>
-						<span className="text-2xl font-bold text-white">StockIQ</span>
-					</div>
-
-					{/* User Greeting */}
-					<div className="text-white font-medium">
-						{firstName ? `Hello ${firstName}` : 'Hello'}
-					</div>
+			<div className="flex flex-col gap-6 p-4 md:p-6">
+				<div className="flex justify-center">
+					<SearchBar />
 				</div>
-			</div>
-
-			{/* Main Content */}
-			<div className="relative z-10 p-6">
-				<div className="text-white text-2xl">
-					Hello
+				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+					<MarketOverview />
+				</div>
+				<div className="grid gap-4 md:grid-cols-3">
+					<div className="md:col-span-2">
+						<MarketNews />
+					</div>
+					<div>
+						<Watchlist />
+					</div>
 				</div>
 			</div>
 		</div>

@@ -6,6 +6,7 @@ from db import insert_prediction, get_db_connection
 from fastapi.middleware.cors import CORSMiddleware
 
 from routers.auth import router as auth_router
+from routers.market import router as market_router
 from routers import stock_router 
 load_dotenv()
 
@@ -14,7 +15,8 @@ db = None
 app = FastAPI()
 
 app.include_router(auth_router, prefix="/api")
-app.include_router(stock_router.router)
+app.include_router(stock_router.router, prefix="/api")
+app.include_router(market_router, prefix = "/api")
 
 origins = [
 		"http://localhost:3000"
