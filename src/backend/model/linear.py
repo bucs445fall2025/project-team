@@ -209,8 +209,8 @@ def create_model(ticker: str = TICKER):
     return model
 
 #TESTING:
-if __name__ == "__main__":
-    model = create_model(TICKER)
-    target_date = (pd.Timestamp.now() + pd.Timedelta(days=1)).strftime('%Y-%m-%d')
-    pred = model.predict(target_date=target_date)
-    print(f"Prediction for {TICKER} on {target_date}: ${pred:.2f}")
+#if __name__ == "__main__":
+#    model = create_model(TICKER)
+#    target_date = (pd.Timestamp.now() + pd.Timedelta(days=1)).strftime('%Y-%m-%d')
+#    pred = model.predict(target_date=target_date)
+#    print(f"Prediction for {TICKER} on {target_date}: ${pred:.2f}")

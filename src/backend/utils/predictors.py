@@ -2,10 +2,13 @@ import os
 import pandas as pd
 import db
 from utils.load_model import load_model
+from model.linear import create_model
+from utils.get_sp500 import get_sp500
 
 DIR = "cached_models/"
 MODEL_TYPE = "LINEAR"
 TARGET_DATE = (pd.Timestamp.now() + pd.Timedelta(days=1)).strftime('%Y-%m-%d')
+FILE_EXT = ".pth"
 
 def run_all_predictions(file_path: str=DIR, input: str=TARGET_DATE, model_type: str=MODEL_TYPE, device: str="cpu"):
 	file_path = os.path.join(file_path, model_type)
@@ -25,3 +28,17 @@ def run_prediction(file_path: str, ticker: str, input: str=TARGET_DATE, device: 
 		db.insert_prediction(ticker, prediction)
 	except Exception as e:
 		print(f"Error while posting to database: {e}")
+
+def save_sp500(count: int = 500, file_path: str=DIR, model_type: str=MODEL_TYPE):
+	sp500_tickers = get_sp500()
+	file_name = pd.Timestamp.now().strftime('%Y-%m-%d') + FILE_EXT
+	for i, ticker in enumerate(sp500_tickers[:count]):
+		model_path = os.path.join(file_path, model_type, ticker, file_name)
+		if not os.path.exists(model_path):
+			try:
+				create_model(ticker)
+				print(f"[{i}] Saved model for {ticker} [{pd.Timestamp.now()}]")
+			except Exception as e:
+				print(e)
+		else:
+			print(f"Skipping {ticker}, already trained today")
