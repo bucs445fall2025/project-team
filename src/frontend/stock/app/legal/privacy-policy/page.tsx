@@ -173,9 +173,9 @@ export default function PrivacyPolicy() {
 
 						<div className="bg-green-500/20 border border-green-500/50 rounded-lg p-4 mt-8">
 							<p className="text-green-400 font-semibold">
-								✅ TL;DR: We collect basic info to make the site work, we don't sell your data, we try our
-								best to keep it secure, and you can delete your account anytime. We're students, not
-								evil tech giants.
+								TL;DR: We collect basic info to make the site work, we don't sell your data (yet), we try our
+								best to keep it secure, and you can delete your account anytime (coming soon). We're students, not
+								evil tech giants (yet).
 							</p>
 						</div>
 					</div>

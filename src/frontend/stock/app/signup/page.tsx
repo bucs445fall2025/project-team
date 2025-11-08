@@ -60,6 +60,7 @@ export default function SignUp() {
 				const data = await response.json();
 				console.log('Sign up successful:', data);
 				setSignupStatus('success');
+				window.location.href = '/login';
 			} else {
 				const error = await response.json();
 				console.error('Sign up failed:', error);
