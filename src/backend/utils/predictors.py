@@ -22,10 +22,11 @@ def run_all_predictions(file_path: str=DIR, input: str=TARGET_DATE, model_type: 
 
 def run_prediction(file_path: str, ticker: str, input: str=TARGET_DATE, device: str="cpu"):
 	model = load_model(file_path, ticker, device)
+	print(f"Loaded model for {ticker} from {file_path}")
 	prediction = model.predict(input)
 	print(f"[{file_path[len(DIR):]}] Prediction for {input}: ${prediction:.2f}")
 	try:
-		db.insert_prediction(ticker, prediction)
+		db.insert_prediction(ticker, round(prediction, 2))
 	except Exception as e:
 		print(f"Error while posting to database: {e}")
 
