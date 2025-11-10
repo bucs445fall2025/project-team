@@ -47,7 +47,7 @@ export default function Header() {
 	}, [])
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+		<div className="min-h-screen bg-black">
 			<div className="flex flex-col gap-6 p-4 md:p-6">
 				<div className="flex justify-center">
 					<SearchBar />
