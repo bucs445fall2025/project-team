@@ -4,12 +4,14 @@ import db
 from utils.load_model import load_model
 from model.linear import create_model
 from utils.get_sp500 import get_sp500
+import concurrent.futures
 
 DIR = "cached_models/"
 MODEL_TYPE = "LINEAR"
 TARGET_DATE = (pd.Timestamp.now() + pd.Timedelta(days=1)).strftime('%Y-%m-%d')
 FILE_EXT = ".pth"
 
+""" Old run all predictions (sequential) 
 def run_all_predictions(file_path: str=DIR, input: str=TARGET_DATE, model_type: str=MODEL_TYPE, device: str="cpu"):
 	file_path = os.path.join(file_path, model_type)
 	if not os.path.exists(file_path):
@@ -17,8 +19,31 @@ def run_all_predictions(file_path: str=DIR, input: str=TARGET_DATE, model_type: 
 	for root, _, files in os.walk(file_path):
 		for file in files:
 			if file.endswith(".pth"):
-				run_prediction(os.path.join(root, file), os.path.basename(root), input, device)
+				run_prediction(os.path.join(root, file), os.path.basename(root), input, device) """
 
+
+def run_all_predictions(file_path: str=DIR, input: str=TARGET_DATE, model_type: str=MODEL_TYPE, device: str="cpu"):
+    file_path = os.path.join(file_path, model_type)
+    if not os.path.exists(file_path):
+        raise FileNotFoundError("Error: Directory not found.")
+    tasks = []
+    for root, _, files in os.walk(file_path):
+        for file in files:
+            if file.endswith(".pth"):
+                task_args = (os.path.join(root, file), os.path.basename(root), input, device)
+                tasks.append(task_args)
+    # If model.predict is heavily CPU-bound (complex calculations), use ProcessPoolExecutor instead.
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        future_to_prediction = {
+            executor.submit(run_prediction, *args): args[1]
+            for args in tasks
+        }        
+        for future in concurrent.futures.as_completed(future_to_prediction):
+            ticker = future_to_prediction[future]
+            try:
+                future.result()
+            except Exception as e:
+                print(f'Ticker {ticker} generated an exception: {e}')
 
 def run_prediction(file_path: str, ticker: str, input: str=TARGET_DATE, device: str="cpu"):
 	model = load_model(file_path, ticker, device)
