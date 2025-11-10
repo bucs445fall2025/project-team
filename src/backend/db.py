@@ -27,6 +27,8 @@ def insert_prediction (ticker: str, prediction_data: int):
     if conn is None:
         raise Exception("Database connection failed")
     try:
+        
+        date_now = datetime.now().strftime("%Y-%m-%d")
 
         cursor = conn.cursor(dictionary=True)
         cursor.execute(
@@ -34,8 +36,8 @@ def insert_prediction (ticker: str, prediction_data: int):
             (ticker,)
         )
         result = cursor.fetchone()
-        if not result or result['Date_DTTM'] < datetime.now() - timedelta(days=1):
-            cursor.execute("INSERT INTO Basic_Stock_Predictions (Stock_Ticker, Prediction_Data) VALUES (%s, %s)", (ticker, prediction_data))
+        if not result or result['Date_DTTM'] < (datetime.now() - timedelta(days=1)).date():
+            cursor.execute("INSERT INTO Basic_Stock_Predictions (Date_DTTM, Stock_Ticker, Prediction_Data) VALUES (%s, %s, %s)", (date_now, ticker, prediction_data))
             conn.commit()
             msg = "Insertion successful."
         else:
@@ -48,7 +50,7 @@ def insert_prediction (ticker: str, prediction_data: int):
         print(f"DB insertion error: {e}")
         raise Exception("Failed to insert prediction")
 
-#if __name__ == "__main__":
-    # Simple test
-#    msg = insert_prediction("NVDA", 100000)
-#    print(msg)
+if __name__ == "__main__":
+    # simple test
+    msg = insert_prediction("blah", 100000)
+    print(msg)
