@@ -347,7 +347,7 @@ export default function SingleStockView({ ticker }: { ticker: string }) {
 							{/* <div key={chartLoadingKey} className="absolute top-0 left-0 h-full w-full bg-slate-900 z-10 animate-sweep pointer-events-none" /> */}
 
 							{
-								chartData && 
+								chartData &&
 							
 							<ResponsiveContainer width="100%" height="100%">
 								<AreaChart
@@ -359,8 +359,8 @@ export default function SingleStockView({ ticker }: { ticker: string }) {
 											<rect id="clip-rect" x="0" y="0" width="0%" height="100%" />
 										</clipPath> */}
 										<linearGradient id="chart-gradient" x1="0" y1="0" x2="0" y2="1">
-											<stop offset="5%" stopColor={chartData[chartData.length -1].price > chartData[0].price ? "#10B981" : "#EF4444"} stopOpacity={0.3} />
-											<stop offset="95%" stopColor={chartData[chartData.length - 1].price > chartData[0].price ? "#10B981" : "#EF4444"} stopOpacity={0} />
+											<stop offset="5%" stopColor={chartData.length > 0 && chartData[chartData.length -1].price > chartData[0].price ? "#10B981" : "#EF4444"} stopOpacity={0.3} />
+													<stop offset="95%" stopColor={chartData.length > 0 && chartData[chartData.length - 1].price > chartData[0].price ? "#10B981" : "#EF4444"} stopOpacity={0} />
 										</linearGradient>
 									</defs>
 
@@ -385,7 +385,7 @@ export default function SingleStockView({ ticker }: { ticker: string }) {
 									<Area
 										type="monotone"
 										dataKey="price"
-										stroke={chartData[chartData.length - 1].price > chartData[0].price ? "#10B981" : "#EF4444"}
+										stroke={chartData.length > 0 && chartData[chartData.length - 1].price > chartData[0].price ? "#10B981" : "#EF4444"}
 										fill="url(#chart-gradient)"
 										strokeWidth={2}
 										isAnimationActive={false}
