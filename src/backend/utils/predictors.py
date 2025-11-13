@@ -55,7 +55,7 @@ def run_prediction(file_path: str, ticker: str, input: str=TARGET_DATE, device: 
 		db.insert_prediction(ticker, round(prediction, 2))
 		return True
 	except Exception as e:
-		print(f"Error while posting to database: {e}")
+		print(f"[{ticker}] Error while posting to database: {e}")
 		return False
 
 def save_sp500(count: int = 500, file_path: str=DIR, model_type: str=MODEL_TYPE):
