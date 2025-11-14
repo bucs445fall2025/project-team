@@ -21,11 +21,19 @@ class gemini_api:
 
     def _query_gemini(self, prompt: str) -> str:
         # call gemini api
-        response = self.client.models.generate_content(
-            model=self.model_name,
-            contents=prompt
-        )
 
+        for attempt in range(5):
+            try:
+                response = self.client.models.generate_content(
+                    model=self.model_name,
+                    contents=prompt
+                )
+                return response.text
+            except Exception as e:
+                if attempt < 4:
+                    continue
+                else:
+                    raise RuntimeError(f"Gemini API request failed after 5 attempts: {str(e)}")
         return response.text
 
     def analyze_stock(self, ticker: str) -> str:
@@ -71,7 +79,7 @@ class gemini_api:
         return self._query_gemini(prompt)
 
 
-#if __name__ == "__main__":
-#    gemini = gemini_api()
-#    analysis = gemini.analyze_stock("AAPL")
-#    print(analysis)
+if __name__ == "__main__":
+    gemini = gemini_api()
+    analysis = gemini.analyze_stock("GLW")
+    print(analysis)
