@@ -3,7 +3,7 @@ from typing import Optional
 
 from yfinance import data
 """
-    get stock data using custom date range.
+    get stock data using custom date range
 
     args: ticker (str): stock ticker symbol
           start_date (str): start date in 'YYYY-MM-DD' format
