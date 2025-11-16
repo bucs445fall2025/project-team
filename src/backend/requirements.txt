@@ -1,0 +1,12 @@
+fastapi
+yfinance
+uvicorn
+mysql-connector-python
+dotenv
+cachetools
+pandas
+numpy>=1.24,<2
+pyjwt
+requests
+google-genai
+fastapi-cache
