@@ -15,9 +15,6 @@
 ### Roadmap
 - [ ] Add More Models
   
-## SRS
-[document](url to google doc)
-  
 ### Prerequisites
 * [Docker](https://www.docker.com/)
 * <<any additional software. Be specific about versions.>>
