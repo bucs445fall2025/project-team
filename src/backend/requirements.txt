@@ -9,4 +9,4 @@ numpy>=1.24,<2
 pyjwt
 requests
 apscheduler
-genai
+google-genai

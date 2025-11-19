@@ -6,9 +6,12 @@ from model.linear import create_model
 from utils.get_sp500 import get_sp500
 import concurrent.futures
 from utils.timer import timer
+from pathlib import Path
 
-DIR = "cached_models/"
+BASE_DIR = Path(__file__).resolve().parent
+DIR = "cached_models"
 MODEL_TYPE = "LINEAR"
+MODEL_DIR = BASE_DIR.parent / DIR
 TARGET_DATE = (pd.Timestamp.now() + pd.Timedelta(days=1)).strftime('%Y-%m-%d')
 FILE_EXT = ".pth"
 
@@ -23,10 +26,10 @@ def run_all_predictions(file_path: str=DIR, input: str=TARGET_DATE, model_type: 
 				run_prediction(os.path.join(root, file), os.path.basename(root), input, device) """
 
 @timer
-def run_all_predictions(file_path: str=DIR, input: str=TARGET_DATE, model_type: str=MODEL_TYPE, device: str="cpu"):
+def run_all_predictions(file_path: str=MODEL_DIR, input: str=TARGET_DATE, model_type: str=MODEL_TYPE, device: str="cpu"):
 	file_path = os.path.join(file_path, model_type)
 	if not os.path.exists(file_path):
-		raise FileNotFoundError("Error: Directory not found.")
+		raise FileNotFoundError(f"Error: Directory {file_path} not found.")
 	tasks = []
 	for root, _, files in os.walk(file_path):
 		for file in files:

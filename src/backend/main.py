@@ -39,7 +39,7 @@ _yf_api_cache = TTLCache(maxsize=128, ttl=30)
 
 # Prediction Scheduling
 scheduler = BackgroundScheduler()
-trigger = CronTrigger(hour=15, minute=0)
+trigger = CronTrigger(hour=13, minute=0) #1:00 pm daily
 scheduler.add_job(run_all_predictions, trigger)
 scheduler.start()
 
