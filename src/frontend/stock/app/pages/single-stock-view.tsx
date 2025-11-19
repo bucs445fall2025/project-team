@@ -28,6 +28,8 @@ import {
 	ArrowUpIcon,
 	Building,
 	TrendingUp,
+	Star, // Added Star Icon
+	Check // Added Check Icon for success state
 } from "lucide-react"
 import { useEffect, useState, useMemo } from "react"
 import { cn } from "@/lib/utils"
@@ -85,6 +87,10 @@ export default function SingleStockView({ ticker }: { ticker: string }) {
 	const [timeframe, setTimeframe] = useState("1D")
 	const [chartLoadingKey, setChartLoadingKey] = useState(0)
 	const [livePriceData, setLivePriceData] = useState<any>(null)
+
+	// New State for Watchlist Button
+	const [watchlistLoading, setWatchlistLoading] = useState(false)
+	const [addedToWatchlist, setAddedToWatchlist] = useState(false)
 
 	useEffect(() => {
 		if (!ticker) return
@@ -169,6 +175,41 @@ export default function SingleStockView({ ticker }: { ticker: string }) {
 		}
 
 	}, [chartData])
+
+	// --- NEW FUNCTION: ADD TO WATCHLIST ---
+	const handleAddToWatchlist = async () => {
+		const token = document.cookie
+			.split('; ')
+			.find(row => row.startsWith('token='))
+			?.split('=')[1]
+
+		if (!token) {
+			alert("You must be logged in to add to watchlist.")
+			return
+		}
+
+		setWatchlistLoading(true)
+		try {
+			const response = await fetch(`http://localhost:8000/api/user/watchlist/post/${ticker}`, {
+				method: 'POST',
+				headers: {
+					'Authorization': `Bearer ${token}`
+				}
+			})
+
+			if (response.ok) {
+				setAddedToWatchlist(true)
+				// Reset the success state after 3 seconds
+				setTimeout(() => setAddedToWatchlist(false), 3000)
+			} else {
+				console.error("Failed to add to watchlist")
+			}
+		} catch (error) {
+			console.error("Error adding to watchlist:", error)
+		} finally {
+			setWatchlistLoading(false)
+		}
+	}
 
 	const chartPerformance = useMemo(() => {
 		if (chartData.length < 2) return null
@@ -280,10 +321,34 @@ export default function SingleStockView({ ticker }: { ticker: string }) {
 				<Card>
 					<CardHeader>
 						<div className="flex items-center justify-between">
-							<div>
-								<CardTitle className="text-3xl">{stock.name}</CardTitle>
-								<CardDescription className="text-lg">{ticker.toUpperCase()}</CardDescription>
+							<div className="flex items-center gap-4">
+								<div>
+									<CardTitle className="text-3xl">{stock.name}</CardTitle>
+									<CardDescription className="text-lg">{ticker.toUpperCase()}</CardDescription>
+								</div>
+
+								{/* --- NEW BUTTON ADDED HERE --- */}
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={handleAddToWatchlist}
+									disabled={watchlistLoading || addedToWatchlist}
+									className={cn("ml-2 transition-all", addedToWatchlist && "text-green-500 border-green-500")}
+								>
+									{addedToWatchlist ? (
+										<>
+											<Check className="mr-2 h-4 w-4" />
+											Added
+										</>
+									) : (
+										<>
+											<Star className={cn("mr-2 h-4 w-4", watchlistLoading && "animate-spin")} />
+											{watchlistLoading ? "Adding..." : "Watch"}
+										</>
+									)}
+								</Button>
 							</div>
+
 							<div className="text-right">
 								{livePriceData ? (
 									<div className="space-y-1">
@@ -350,52 +415,52 @@ export default function SingleStockView({ ticker }: { ticker: string }) {
 
 							{
 								chartData &&
-							
-							<ResponsiveContainer width="100%" height="100%">
-								<AreaChart
-									data={chartData}
-									margin={{ top: 5, right: 20, left: -10, bottom: 20 }}
-								>
-									<defs>
-										{/* <clipPath id="reveal-clip">
-											<rect id="clip-rect" x="0" y="0" width="0%" height="100%" />
-										</clipPath> */}
-										<linearGradient id="chart-gradient" x1="0" y1="0" x2="0" y2="1">
-											<stop offset="5%" stopColor={chartData.length > 0 && chartData[chartData.length -1].price > chartData[0].price ? "#10B981" : "#EF4444"} stopOpacity={0.3} />
-													<stop offset="95%" stopColor={chartData.length > 0 && chartData[chartData.length - 1].price > chartData[0].price ? "#10B981" : "#EF4444"} stopOpacity={0} />
-										</linearGradient>
-									</defs>
 
-									<XAxis
-										dataKey="time"
-										tickFormatter={formatTick}
-										tickLine={false}
-										axisLine={false}
-										tickMargin={10}
-										minTickGap={80}
-										hide
-									/>
-									<YAxis
-										domain={["dataMin - 1", "dataMax + 1"]}
-										tickFormatter={(num) => `$${num.toFixed(2)}`}
-										width={80}
-									/>
-									<Tooltip
-										labelFormatter={(label) => formatTick(label)}
-										formatter={(value: number) => [`$${value.toFixed(2)}`, "Price"]}
-									/>
-									<Area
-										type="monotone"
-										dataKey="price"
-										stroke={chartData.length > 0 && chartData[chartData.length - 1].price > chartData[0].price ? "#10B981" : "#EF4444"}
-										fill="url(#chart-gradient)"
-										strokeWidth={2}
-										isAnimationActive={false}
-										clipPath="url(#reveal-clip)"
-									/>
-									{marketIndicators}
-								</AreaChart>
-							</ResponsiveContainer>
+								<ResponsiveContainer width="100%" height="100%">
+									<AreaChart
+										data={chartData}
+										margin={{ top: 5, right: 20, left: -10, bottom: 20 }}
+									>
+										<defs>
+											{/* <clipPath id="reveal-clip">
+                                            <rect id="clip-rect" x="0" y="0" width="0%" height="100%" />
+                                        </clipPath> */}
+											<linearGradient id="chart-gradient" x1="0" y1="0" x2="0" y2="1">
+												<stop offset="5%" stopColor={chartData.length > 0 && chartData[chartData.length - 1].price > chartData[0].price ? "#10B981" : "#EF4444"} stopOpacity={0.3} />
+												<stop offset="95%" stopColor={chartData.length > 0 && chartData[chartData.length - 1].price > chartData[0].price ? "#10B981" : "#EF4444"} stopOpacity={0} />
+											</linearGradient>
+										</defs>
+
+										<XAxis
+											dataKey="time"
+											tickFormatter={formatTick}
+											tickLine={false}
+											axisLine={false}
+											tickMargin={10}
+											minTickGap={80}
+											hide
+										/>
+										<YAxis
+											domain={["dataMin - 1", "dataMax + 1"]}
+											tickFormatter={(num) => `$${num.toFixed(2)}`}
+											width={80}
+										/>
+										<Tooltip
+											labelFormatter={(label) => formatTick(label)}
+											formatter={(value: number) => [`$${value.toFixed(2)}`, "Price"]}
+										/>
+										<Area
+											type="monotone"
+											dataKey="price"
+											stroke={chartData.length > 0 && chartData[chartData.length - 1].price > chartData[0].price ? "#10B981" : "#EF4444"}
+											fill="url(#chart-gradient)"
+											strokeWidth={2}
+											isAnimationActive={false}
+											clipPath="url(#reveal-clip)"
+										/>
+										{marketIndicators}
+									</AreaChart>
+								</ResponsiveContainer>
 							}
 						</div>
 						<div className="flex justify-center gap-1 sm:gap-2 mt-4">
@@ -440,7 +505,7 @@ export default function SingleStockView({ ticker }: { ticker: string }) {
 
 			<div className="lg:col-span-1 space-y-6">
 				<Summary ticker={ticker} />
-				<Prediction ticker={ticker}/>
+				<Prediction ticker={ticker} />
 			</div>
 		</div>
 	)

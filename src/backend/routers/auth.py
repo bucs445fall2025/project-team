@@ -67,6 +67,11 @@ async def login(loginRequest: LoginRequest, response: Response):
 
 @router.get("/auth/getFirstName")
 async def getFirstName(token: Annotated[str, Depends(oauth2_scheme)]):
-	user_info = get_user_info(token)
-	print("test")
-	return {"firstName": user_info['first']}
+    user_info = get_user_info(token)
+    return {"firstName": user_info['first']}
+
+
+@router.get("/auth/getFirstName")
+async def getUserId(token: Annotated[str, Depends(oauth2_scheme)]):
+    user_info = get_user_info(token)
+    return user_info["id"]

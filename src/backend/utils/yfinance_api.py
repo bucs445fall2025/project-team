@@ -3,12 +3,12 @@ from typing import Optional
 
 from yfinance import data
 """
-    get stock data using custom date range
+	get stock data using custom date range
 
-    args: ticker (str): stock ticker symbol
-          start_date (str): start date in 'YYYY-MM-DD' format
-          end_date (str): end date in 'YYYY-MM-DD' format
-          interval (str): data interval (1d, 1wk, 1mo)
+	args: ticker (str): stock ticker symbol
+		  start_date (str): start date in 'YYYY-MM-DD' format
+		  end_date (str): end date in 'YYYY-MM-DD' format
+		  interval (str): data interval (1d, 1wk, 1mo)
 
 """
 def get_stock_data(ticker: str, start_date: Optional[str], end_date: Optional[str], interval: str = "1d"):
@@ -31,3 +31,28 @@ def get_stock_data(ticker: str, start_date: Optional[str], end_date: Optional[st
 
     data.columns = flattened_columns   
     return data
+
+
+def get_stock_info_multi(tickers: str):
+    data = yf.Tickers(tickers)
+
+    tickers_split = tickers.split(" ")
+    to_return = []
+
+    for ticker in tickers_split:
+        if ticker.upper() not in data.tickers:
+            continue
+
+        stock = data.tickers[ticker.upper()]
+        info = stock.info
+
+        obj = {
+            "symbol": ticker,
+            "name": info.get("longName") or info.get("shortName"),
+            "price": info.get("currentPrice") or info.get("regularMarketPrice"),
+            "change": info.get("regularMarketChange"),
+            "percentChange": info.get("regularMarketChangePercent"),
+        }
+        to_return.append(obj)
+
+    return to_return

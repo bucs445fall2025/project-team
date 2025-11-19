@@ -67,8 +67,85 @@ def get_prediction(ticker: str):
 	except Error as e:
 		print(f"DB Fetching error: {e}")
 		raise Exception("Failed to get row")
-		
-#if __name__ == "__main__":
-#    # simple test
-#    msg = insert_prediction("blah", 100000)
-#    print(msg)
+
+
+def insert_watchlist(userid: int, ticker: str):
+	conn = get_db_connection()
+	if conn is None:
+		raise Exception("Database connection failed")
+
+	try:
+		cursor = conn.cursor()
+
+		# Use INSERT IGNORE or handle duplicate key error
+		cursor.execute(
+			"INSERT INTO watchlist (user_id, ticker) VALUES (%s, %s)", (userid, ticker)
+		)
+		conn.commit()
+
+		affected_rows = cursor.rowcount
+		cursor.close()
+		conn.close()
+
+		if affected_rows > 0:
+			return {"message": "Stock added to watchlist", "success": True}
+		else:
+			return {"message": "Stock already in watchlist", "success": False}
+
+	except mysql.connector.IntegrityError as e:
+		# Handle duplicate entry (if UNIQUE constraint exists)
+		if "Duplicate entry" in str(e):
+			return {"message": "Stock already in watchlist", "success": False}
+		raise Exception(f"Failed to add to watchlist: {e}")
+	except Error as e:
+		print(f"DB insertion error: {e}")
+		raise Exception("Failed to add to watchlist")
+
+
+def get_watchlist(userid: int):
+    conn = get_db_connection()
+    if conn is None:
+        raise Exception("Database connection failed")
+
+    try:
+        cursor = conn.cursor(dictionary=False)
+        cursor.execute(
+			"SELECT ticker FROM watchlist WHERE user_id = %s ORDER BY added_at DESC",
+			(userid,),
+		)
+        results = cursor.fetchall()
+        cursor.close()
+        conn.close()
+
+        tickers = [ticker[0] for ticker in results]
+        return tickers
+
+    except Error as e:
+        print(f"DB fetching error: {e}")
+        raise Exception("Failed to get watchlist")
+
+
+def remove_from_watchlist(userid: int, ticker: str):
+	conn = get_db_connection()
+	if conn is None:
+		raise Exception("Database connection failed")
+
+	try:
+		cursor = conn.cursor()
+		cursor.execute(
+			"DELETE FROM watchlist WHERE user_id = %s AND ticker = %s", (userid, ticker)
+		)
+		conn.commit()
+
+		affected_rows = cursor.rowcount
+		cursor.close()
+		conn.close()
+
+		if affected_rows > 0:
+			return {"message": "Stock removed from watchlist", "success": True}
+		else:
+			return {"message": "Stock not found in watchlist", "success": False}
+
+	except Error as e:
+		print(f"DB deletion error: {e}")
+		raise Exception("Failed to remove from watchlist")
