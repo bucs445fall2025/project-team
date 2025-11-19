@@ -176,7 +176,6 @@ export default function SingleStockView({ ticker }: { ticker: string }) {
 
 	}, [chartData])
 
-	// --- NEW FUNCTION: ADD TO WATCHLIST ---
 	const handleAddToWatchlist = async () => {
 		const token = document.cookie
 			.split('; ')
@@ -190,7 +189,7 @@ export default function SingleStockView({ ticker }: { ticker: string }) {
 
 		setWatchlistLoading(true)
 		try {
-			const response = await fetch(`http://localhost:8000/api/user/watchlist/post/${ticker}`, {
+			const response = await fetch(`http://localhost:8000/api/user/watchlist/${ticker}`, {
 				method: 'POST',
 				headers: {
 					'Authorization': `Bearer ${token}`

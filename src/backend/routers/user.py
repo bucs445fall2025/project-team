@@ -26,7 +26,7 @@ async def isInWatchlist(ticker: str, token: Annotated[str, Depends(oauth2_scheme
 		return True
 	return False
 
-@router.post("/user/watchlist/post/{ticker}")
+@router.post("/user/watchlist/{ticker}")
 async def addWatchlist(
 	ticker: str, token: Annotated[str, Depends(oauth2_scheme)]
 ):
