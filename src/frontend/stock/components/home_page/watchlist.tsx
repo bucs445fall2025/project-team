@@ -72,7 +72,7 @@ export default function Watchlist() {
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{watchlistItems.map((item) => (
+							{watchlistItems.map((item: any) => (
 								<TableRow
 									key={item.symbol}
 									onClick={() => handleRowClick(item.symbol)}
