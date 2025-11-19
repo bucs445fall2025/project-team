@@ -4,7 +4,10 @@ from dotenv import load_dotenv
 from cachetools import cached, TTLCache
 from db import insert_prediction, get_db_connection
 from fastapi.middleware.cors import CORSMiddleware
-
+from contextlib import asynccontextmanager
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
+from utils.predictors import run_all_predictions
 from routers.auth import router as auth_router
 from routers.market import router as market_router
 from routers.predict import router as predict_router
@@ -33,18 +36,17 @@ app.add_middleware(
 )
 
 _yf_api_cache = TTLCache(maxsize=128, ttl=30)
-## ================================================================ Database Interfacing ================================================================ ##
 
-def test_insert_prediction():
-	ticker = "AAPL"
-	prediction_data = 150
-	success = insert_prediction(ticker, prediction_data)
-	if success:
-		print("Insertion successful")
-	else:
-		print("Insertion failed")
+# Prediction Scheduling
+scheduler = BackgroundScheduler()
+trigger = CronTrigger(hour=15, minute=0)
+scheduler.add_job(run_all_predictions, trigger)
+scheduler.start()
 
-## ================================================================#####################================================================================ ##
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+	yield
+	scheduler.shutdown()
 
 @app.get("/")
 async def read_root():
