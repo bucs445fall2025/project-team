@@ -26,11 +26,11 @@ The website should be up >99% of the time, it shouldn’t crash because one user
 
 ### User Story
 
-<< Corresponding User Stories completed in this sprint >>
+- stock_prediction_story.md
 
 ### Sprint Requirements Attempted
 
-<< The corresponding SRS requirement that the team completed in the last sprint >>
+- Linear regression (data analysis)
 
 ### Completed Requirements
 
@@ -58,15 +58,16 @@ The website should be up >99% of the time, it shouldn’t crash because one user
 
 ### Requirement Target
 
-<< The corresponding SRS requirement that our team will be complete in next sprint >>
+- Cleanliness
 
 ### User Stories
 
-<< Corresponding User Stories >>
+- central_place.md
 
 ### Planning
 
-- 
+- Cache predictions
+- Login
 
 ### Action Items
 
@@ -82,3 +83,4 @@ The website should be up >99% of the time, it shouldn’t crash because one user
 - Make save/get/push code for saving AI models: Brendon
 - Populate database table: Brendon
 - Start creating homepage for logged in users: Michael
+
