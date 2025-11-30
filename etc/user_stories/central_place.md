@@ -11,5 +11,4 @@ As a client, I want a central place where I can get information about a stock in
 ---
 
 ## **Notes**
-- [Any additional considerations or insights]
-- [Potential risks or challenges]
+- N/A
