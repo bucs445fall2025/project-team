@@ -2,7 +2,7 @@ import os
 import mysql.connector
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
-from yfinance_api import get_stock_data
+from utils.yfinance_api import get_stock_data
 from google import genai
 
 load_dotenv()
