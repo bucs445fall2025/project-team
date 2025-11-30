@@ -16,7 +16,7 @@
 
 ### User Story
 
-- temp_user_story.md
+- remember_stock.md
 
 ### Sprint Requirements Attempted
 
@@ -56,7 +56,7 @@
 
 ### User Stories
 
-- temp_user_story.md
+- remember_stock.md
 
 ### Planning
 
