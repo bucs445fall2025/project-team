@@ -21,7 +21,7 @@
 
 ### Installing
   - Download project files
-  - Ensure Docker is running, run:
+  - Ensure Docker is running, run:  
     `docker build -t stock_prediction_app .`  
     `docker run [-detatch] stock_prediction_app`
     (the detatch argument is optional-- only use if you want to run in a separate terminal)
