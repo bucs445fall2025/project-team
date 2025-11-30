@@ -17,18 +17,17 @@
   
 ### Prerequisites
 * [Docker](https://www.docker.com/)
-* <<any additional software. Be specific about versions.>>
+* [NextJS](https://nextjs.org/)
 
 ### Installing
-<<
   Using VSCODE:
     - Download project files
-    - Have python installed, then install backend requirements by going to the backend directory and doing
-        pip install -r requirements.txt
-    - Run uvicorn main:app --reload in the backend folder
-    - Then go to front end, make sure npm installed, and do
-         npm run dev
->>
+    - Ensure Docker is running, run:
+      `docker build -t stock_prediction_app .`
+      `docker run -detatch stock_prediction_app`
+    - Then go to front end, make sure npm installed, run:
+      `npm run dev`
+
 
 ## Built With
 * [PyTorch](https://pytorch.org/)
