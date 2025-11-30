@@ -55,7 +55,7 @@
 
 ### User Stories
 
-- temp_user_story.md
+- stock_prediction_story.md
 
 ### Planning
 
