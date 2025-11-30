@@ -21,12 +21,13 @@
 
 ### Installing
 <<
- A step by step series of examples that tell you how to get a development env running
-Say what the step will be  
-`Give the example`  
-And repeat  
-`until finished`  
-End with an example of getting some output from the system, such as a menu or prompt
+  Using VSCODE:
+    - Download project files
+    - Have python installed, then install backend requirements by going to the backend directory and doing
+        pip install -r requirements.txt
+    - Run uvicorn main:app --reload in the backend folder
+    - Then go to front end, make sure npm installed, and do
+         npm run dev
 >>
 
 ## Built With
