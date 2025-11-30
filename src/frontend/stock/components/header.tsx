@@ -59,7 +59,7 @@ export default function Header() {
 		<div className="backdrop-blur-xl border-b border-blue-400/20 sticky top-0 z-50 shadow-2xl shadow-blue-500/20">
 			<div className="flex items-center justify-between px-6 py-4">
 				{/* Logo */}
-				<Link href="/dashboard" className="flex items-center space-x-2 transition-opacity hover:opacity-80">
+				<Link href="/home" className="flex items-center space-x-2 transition-opacity hover:opacity-80">
 					<div className="bg-gradient-to-br from-blue-500 to-cyan-500 p-2 rounded-lg">
 						<TrendingUp className="w-6 h-6 text-white" />
 					</div>
