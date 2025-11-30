@@ -15,7 +15,7 @@ Updated the requirements section
 
 
 ### User Story
-temp_user_story.md
+central_place.md
 
 ### Sprint Requirements Attempted
 grabbing stock data
@@ -62,4 +62,5 @@ Create database -Brendon Paolino, Michael Zheng, Gavin Suber
 Create Python Read DB - Brendon Paolino, Michael Zheng, Gavin Suber
 Python Write DB - Brendon Paolino, Michael Zheng, Gavin Suber
 Implement Caching in fastapi call - Anyone
+
 Set up basic webpage using Next.JS - Michael Zheng
