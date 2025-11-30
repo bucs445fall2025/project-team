@@ -11,5 +11,4 @@ As a client, I want a central place where I can see all the flagged stocks that 
 ---
 
 ## **Notes**
-- [Any additional considerations or insights]
-- [Potential risks or challenges]
+- N/A
