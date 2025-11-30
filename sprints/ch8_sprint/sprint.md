@@ -16,7 +16,7 @@
 
 ### User Story
 
-- temp_user_story.md
+- stock_prediction_story.md
 
 ### Sprint Requirements Attempted
 
@@ -36,7 +36,7 @@
 
 ***
 
-## Sprint << num >> Planning
+## Sprint 6 Planning
 
 ## Requirements Flex
 
@@ -53,7 +53,7 @@
 
 ### User Stories
 
-- temp_user_story.md
+- central_place.md
 
 ### Planning
 
@@ -71,4 +71,5 @@
 ### Team Work Assignments
 
 - Populate the database: Brendon, Gavin
+
 - Add graphs to the website: Michael
