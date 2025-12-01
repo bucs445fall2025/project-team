@@ -10,3 +10,4 @@ pyjwt
 requests
 apscheduler
 google-genai
+torch
