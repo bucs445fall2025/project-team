@@ -34,7 +34,16 @@ if __name__ == "__main__":
 
 
 class LinearRegression(nn.Module):
+    """
+    Class for creating a Linear Regression Model
+    """
     def __init__(self, ticker=TICKER, api_base_url=API_BASE_URL):
+        """
+        Initialization for Linear Regression
+        Parameters:
+            ticker (string): Company's official stock ticker/symbol
+            api_base_url (string): Url to our FastAPI
+        """
         super(LinearRegression, self).__init__()
         self.linear = nn.Linear(3, 1)
         self.X_mean = None
@@ -48,31 +57,71 @@ class LinearRegression(nn.Module):
         self.model_type = MODEL_TYPE
 
     def get_dir(self) -> str:
+        """
+        Concatenates directory strings
+        Returns:
+            string: The intended file path for the model
+        """
         return DIR + MODEL_TYPE + "/" + self.ticker + "/" + self.get_date() + FILE_EXT
 
     def get_date(self) -> str:
+        """
+        Returns:
+            string: the current date as Y-M-d
+        """
         return pd.Timestamp.now().strftime('%Y-%m-%d')
 
     def forward(self, x):
+        """
+        Forward pass for linear regression
+        Returns:
+            Pytorch Tensor: output of the forward pass
+        """
         return self.linear(x)
     
     def _normalize_features(self, X_tensor):
+        """
+        Normalizes features
+        Parameters:
+            X_tensor (Pytorch Tensor): input features
+        Returns:
+            Pytorch Tensor: normalized input features 
+        """
         if self.X_mean is None or self.X_std is None:
             self.X_mean = X_tensor.mean(dim=0, keepdim=True)
             self.X_std = X_tensor.std(dim=0, keepdim=True)
         return (X_tensor - self.X_mean) / self.X_std
     
     def _normalize_targets(self, y_train):
+        """
+        Normalizes features
+        Parameters:
+            y_train (Pytorch Tensor): target outputs
+        Returns:
+            Pytorch Tensor: normalized target outputs
+        """
         self.y_mean = y_train.mean(dim=0, keepdim=True)
         self.y_std = y_train.std(dim=0, keepdim=True)
         return (y_train - self.y_mean) / self.y_std
     
     def _denormalize_prediction(self, pred_normalized):
+        """
+        Denormalizes output
+        Parameters:
+            pred_normalized: predicted output
+        Returns:
+            int: denormalized output
+        """
         if self.y_mean is not None and self.y_std is not None:
             return pred_normalized * self.y_std + self.y_mean
         return pred_normalized
     
     def _fetch_close_price_from_api(self):
+        """
+        Fetches latest close price from FastAPI
+        Returns:
+            int: close price
+        """
         response = requests.get(f"{self.api_base_url}/api/v1/stock/{self.ticker}")
         if response.status_code != 200:
             raise ValueError(f"Failed to fetch stock data: {response.text}")
@@ -90,11 +139,28 @@ class LinearRegression(nn.Module):
         return close_price
     
     def _prepare_features(self, date_num, distance, close_price):
+        """
+        Prepares features for prediction by normalizing them
+        Parameters:
+            date_num (int): target date
+            distance (float): SMA - latest close price
+            close_price (float): latest close price
+        Returns:
+            Pytorch Tensor: normalized input features ready for prediction
+        """
         x_input = torch.tensor([[date_num, distance, close_price]], dtype=torch.float32)
         x_normalized = (x_input - self.X_mean) / self.X_std
         return x_normalized.to(device)
 
     def populate(self, interval=INTERVAL, sample_count=SAMPLE_COUNT):
+        """
+        Populates tensors for training
+        Parameters:
+            interval (int): Rolling window size for SMA
+            sample_count (int): Number of most recent samples to use
+        Returns:
+            tuple: normalized (X_tensor, y_tensor) where X is the input and y is the output
+        """
         df = get_moving_average(self.ticker, interval)
         close_series = df[("Close", self.ticker)]
         sma_series = df[(f"{interval}-Day SMA", "")]
@@ -119,6 +185,17 @@ class LinearRegression(nn.Module):
         return X_tensor, y_tensor
 
     def predict(self, target_date: str, interval: int = INTERVAL):
+        """
+        Makes a price prediction for a given target date
+        Parameters:
+            target_date (str): The date for the prediction
+            interval (int): Rolling window size for the Simple Moving Average
+        Returns:
+            float: The predicted closing price
+        Raises:
+            ValueError: If the model is not populated, reference date is not set, API request fails,
+                        or no historical data is available.
+        """
         if self.X_mean is None or self.X_std is None:
             raise ValueError("Model must be populated before making predictions")
         if self.reference_date is None:
@@ -148,6 +225,20 @@ class LinearRegression(nn.Module):
 
 def train_model(model, train_loader, test_loader, y_test, optimizer, loss_fn, 
                 epochs=MAX_ITER, patience=PATIENCE):
+    """
+    Trains the linear regression model
+    Parameters:
+        model (nn.Module): The Linear Regression model instance
+        train_loader (DataLoader): DataLoader for training data
+        test_loader (DataLoader): DataLoader for testing data
+        y_test (Pytorch Tensor): Unnormalized test target tensor (for loss normalization)
+        optimizer (optim.Optimizer): The optimizer instance
+        loss_fn (nn.modules.loss): The loss function instance
+        epochs (int): Maximum number of training iterations
+        patience (int): Number of epochs to wait for improvement before early stopping
+    Returns:
+        float: The best (lowest) test loss achieved
+    """
     best_loss = float('inf')
     epochs_no_improve = 0
     for epoch in range(epochs):
@@ -182,6 +273,13 @@ def train_model(model, train_loader, test_loader, y_test, optimizer, loss_fn,
 
 
 def create_model(ticker: str = TICKER):
+    """
+    Initializes, trains, and saves the Linear Regression model
+    Parameters:
+        ticker (str): The stock ticker/symbol
+    Returns:
+        LinearRegression: The trained model instance
+    """
     model = LinearRegression(ticker=ticker, api_base_url=API_BASE_URL).to(device)
     optimizer = optim.SGD(model.parameters(), lr=LR, momentum=MOMENTUM)
     loss_fn = nn.MSELoss()
