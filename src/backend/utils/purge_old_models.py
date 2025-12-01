@@ -3,6 +3,12 @@ import pandas as pd
 from pathlib import Path
 
 def purge_old_models(file_path: str, cutoff_date_str: str):
+	"""
+	Deletes old model files, keeping only one for each ticker (unless after cutoff date)
+	Parameters:
+		file_path (str): Root directory containing the model types
+		cutoff_date_str (str): Date string before which models will be deleted
+	"""
 	root_path = Path(file_path)
 	if not root_path.is_dir():
 		print(f"Error: Root directory '{file_path}' does not exist")

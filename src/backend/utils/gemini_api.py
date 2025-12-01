@@ -124,9 +124,3 @@ class gemini_api:
 		gemini = self._query_gemini(prompt)
 		self.save_to_cache(ticker, gemini)
 		return gemini
-
-
-#if __name__ == "__main__":
-#	gemini = gemini_api()
-#	analysis = gemini.analyze_stock("GLW")
-#	print(analysis)

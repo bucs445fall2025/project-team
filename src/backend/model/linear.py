@@ -305,10 +305,3 @@ def create_model(ticker: str = TICKER):
     train_model(model, train_loader, test_loader, y_test, optimizer, loss_fn)    
     save_model(model, model.get_dir())
     return model
-
-#TESTING:
-#if __name__ == "__main__":
-#    model = create_model(TICKER)
-#    target_date = (pd.Timestamp.now() + pd.Timedelta(days=1)).strftime('%Y-%m-%d')
-#    pred = model.predict(target_date=target_date)
-#    print(f"Prediction for {TICKER} on {target_date}: ${pred:.2f}")

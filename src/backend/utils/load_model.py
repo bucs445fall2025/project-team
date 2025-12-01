@@ -8,6 +8,15 @@ _model_cache = LRUCache(maxsize=256)
 
 @cached(_model_cache)
 def load_model(file_path: str, ticker: str, device: str="cpu"):
+    """
+    Loads a model from a file
+    Parameters:
+        file_path (str): Desired model file path to load
+        ticker (str): Ticker of the company
+        device (str): Device to run the model on
+    Returns:
+        LinearRegression: Trained model instance
+    """
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"The file '{file_path}' was not found.")
     checkpoint = torch.load(

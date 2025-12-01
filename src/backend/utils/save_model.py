@@ -2,6 +2,12 @@ import torch
 import os
 
 def save_model(model, path: str):
+    """
+    Save a model to a desired file path
+    Parameters:
+        model (any): Model instance
+        path (str): Exact file path for the model to be saved to
+    """
     if model.X_mean is None or model.X_std is None:
         print("Model must be populated before saving")
         return False

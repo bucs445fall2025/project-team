@@ -2,6 +2,13 @@ import time
 from functools import wraps
 
 def timer(func):
+	"""
+	Decorator that measures the execution time of a function and prints it
+	Parameters:
+		func (callable): The function to be timed
+	Returns:
+		callable: The decorated wrapper function
+	"""
 	@wraps(func)
 	def wrapper(*args, **kwargs):
 		start_time = time.time()
