@@ -19,7 +19,7 @@
 * [Docker](https://www.docker.com/)
 * [NextJS](https://nextjs.org/)
 
-### Installing
+### Installing and Running
   - Download project files
   - Ensure Docker is running, run (in src/backend):  
     `docker build -t stock_prediction_app .`  
@@ -27,7 +27,10 @@
     (the detatch argument is optional-- only use if you want to run in a separate terminal)
   - Then go to src/frontend, make sure npm is installed, run:  
     `npm run dev`
-
+### Creating Models (predictors.py)
+  - Run the function `save_sp500(count, file_path, model_type)` to create and train models for the S&P 500.
+  - Use `run_prediction(file_path, ticker, input, device, insert_to_db)` to predict from a single model.
+  - Use `run_all_predictions(file_path, input_date, model_type, device)` to predict from all available models of a certain type (e.g. LINEAR)
 
 ## Built With
 * [PyTorch](https://pytorch.org/)
