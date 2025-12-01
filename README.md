@@ -19,7 +19,7 @@
 * [Docker](https://www.docker.com/)
 * [NextJS](https://nextjs.org/)
 
-### Installing
+### Installing and Running
   - Download project files
   - Ensure Docker is running, run (in src/backend):  
     `docker build -t stock_prediction_app .`  
