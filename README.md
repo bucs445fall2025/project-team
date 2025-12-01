@@ -1,47 +1,45 @@
-# << Project Title >>
+# Pelosi's Stash
 ## CS 445 Final Project
-### << Semester, Year >>
+### Fall, 2025
 
-### Team: << team name >>
-<< List Team Members >>
+### Team: 😃
+- Brendon Paolino
+- Michael Zheng
+- Gavin Suber
 
+### Software Requirement Specification
+[Link to google doc here](https://docs.google.com/document/d/1DFohPjYLa29_scmMElGaCI5ZswPOue50vu_ada64PMI/edit?usp=drivesdk)
 ## Getting Started
-<<One paragraph of project description goes here>>
+- This is a stock prediction app/website. We are not liable for any financial decisions that you make based on our data. You will find the true stock prices and our predictions for the future for each of the S&P500 stocks as well as a daily summary on how the stock is performing. We do not guarantee the accuracy of any of these predictions. If you are going to invest in the stock market, you can use this app as a tool to gather more information, but nobody can truly predict the future.
 
 ### Roadmap
-  <<
-A list of features, function or non-functional, you would like to add in the future if you had time, i.e. Phase 2 stuff
-- [ ] Add Changelog
-- [ ] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-  >>
-  
-## SRS
-[document](url to google doc)
+- [ ] Add More Models
   
 ### Prerequisites
 * [Docker](https://www.docker.com/)
-* <<any additional software. Be specific about versions.>>
+* [NextJS](https://nextjs.org/)
 
-### Installing
-<<
- A step by step series of examples that tell you how to get a development env running
-Say what the step will be  
-`Give the example`  
-And repeat  
-`until finished`  
-End with an example of getting some output from the system, such as a menu or prompt
->>
+### Installing and Running
+  - Download project files
+  - Ensure Docker is running, run (in src/backend):  
+    `docker build -t stock_prediction_app .`  
+    `docker run [-detatch] stock_prediction_app`
+    (the detatch argument is optional-- only use if you want to run in a separate terminal)
+  - Then go to src/frontend, make sure npm is installed, run:  
+    `npm run dev`
+### Creating Models (predictors.py)
+  - Run the function `save_sp500(count, file_path, model_type)` to create and train models for the S&P 500.
+  - Use `run_prediction(file_path, ticker, input, device, insert_to_db)` to predict from a single model.
+  - Use `run_all_predictions(file_path, input_date, model_type, device)` to predict from all available models of a certain type (e.g. LINEAR)
 
 ## Built With
- << list all frameworks and modules used here >>
+* [PyTorch](https://pytorch.org/)
+* [FastAPI](https://fastapi.tiangolo.com/)
+* [NextJS](https://nextjs.org/)
 * [requests](https://docs.python-requests.org/en/latest/user/quickstart/#make-a-request) - request for humans
 
 ## License
-<< Add a [license](https://choosealicense.com/) >>
+GPL-3.0 license
 
 ## Acknowledgments
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+* 😃
