@@ -8,6 +8,7 @@ import yfinance as yf
 
 router = APIRouter()
 
+## fetch stock data with parameters
 @router.get("/stock/data")
 def fetch_stock_data(
     ticker: str = Query(..., description="stock ticker symbol"),
@@ -27,7 +28,7 @@ def fetch_stock_data(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
+## get current price with after-hours/pre-market info
 @router.get("/stock/{stock}/currentPrice")
 async def get_current_price(stock: Annotated[str, Path(title="The ticker to fetch")]):
     try:
@@ -71,7 +72,7 @@ async def get_current_price(stock: Annotated[str, Path(title="The ticker to fetc
         print(e)
         raise HTTPException(status_code=404, detail="Current price not found")
 
-
+## get detailed stock information using yfinance
 @router.get("/stock/{ticker}/details")
 async def get_stock_details(ticker: str):
     try:
@@ -107,7 +108,7 @@ async def get_stock_details(ticker: str):
             status_code=404, detail=f"Could not retrieve details for {ticker}: {str(e)}"
         )
 
-
+## get stock chart data based on range parameter
 def get_yfinance_params(range_str: str) -> dict:
     """
     Maps the simple range string to the parameters required by yfinance.
@@ -145,8 +146,7 @@ def get_yfinance_params(range_str: str) -> dict:
         params = range_map["1D"]
 
     return params
-
-
+## default to 1D range if not specified
 @router.get("/stock/{ticker}/chart")
 async def get_stock_chart(ticker: str, request: Request):
     range_str = request.query_params.get("range", "1D")
@@ -175,7 +175,7 @@ async def get_stock_chart(ticker: str, request: Request):
         print(f"An error occurred: {e}")
         raise HTTPException(status_code=500, detail="Failed to fetch chart data.")
 
-
+## get summary statement using Gemini API
 @router.get("/stock/{ticker}/summary")
 async def get_summary_statement(ticker: str):
     gemini = gemini_api()

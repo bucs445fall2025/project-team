@@ -6,6 +6,15 @@ import os
 from datetime import datetime, timedelta
 load_dotenv()
 
+"""
+get_db_connection()
+	database connection and operations for stock predictions and watchlist management
+
+	parameters:
+		- None
+	returns:
+		- database connection object
+"""
 
 def get_db_connection():
 	try:
@@ -21,7 +30,15 @@ def get_db_connection():
 		print(e)
 		raise HTTPException(status_code=500, detail="Could not connect to database")
 
-
+"""
+insert_prediction(ticker: str, prediction_data: int)
+	Inserts a new stock prediction into the Basic_Stock_Predictions table if no recent prediction exists.
+	parameters:
+		- ticker: Stock ticker symbol
+		- prediction_data: Prediction data as an integer
+	returns:
+		- message indicating success or reason for skipping insertion
+"""
 def insert_prediction(ticker: str, prediction_data: int):
 	conn = get_db_connection()
 	if conn is None:
@@ -50,6 +67,14 @@ def insert_prediction(ticker: str, prediction_data: int):
 		print(f"DB insertion error: {e}")
 		raise Exception("Failed to insert prediction")
 
+"""get_prediction(ticker: str)
+	Retrieves the latest stock prediction for a given ticker from the Basic_Stock_Predictions
+	
+	parameters:
+		- ticker: Stock ticker symbol
+	returns:
+		- prediction record as a dictionary
+"""
 def get_prediction(ticker: str):
 	conn = get_db_connection()
 	if conn is None:
@@ -68,7 +93,14 @@ def get_prediction(ticker: str):
 		print(f"DB Fetching error: {e}")
 		raise Exception("Failed to get row")
 
-
+"""insert_watchlist(userid: int, ticker: str)
+	Adds a stock ticker to the user's watchlist if it is not already present.
+	parameters:
+		- userid: User ID
+		- ticker: Stock ticker symbol
+	returns:
+		- message indicating success or if the stock is already in the watchlist
+"""
 def insert_watchlist(userid: int, ticker: str):
 	conn = get_db_connection()
 	if conn is None:
@@ -101,7 +133,16 @@ def insert_watchlist(userid: int, ticker: str):
 		print(f"DB insertion error: {e}")
 		raise Exception("Failed to add to watchlist")
 
-
+"""
+get_watchlist(userid: int)
+	Retrieves the watchlist for a given user ID.
+	
+	parameters:
+		- userid: User ID
+	
+	returns:
+		- list of stock tickers in the user's watchlist
+"""
 def get_watchlist(userid: int):
     conn = get_db_connection()
     if conn is None:
@@ -124,7 +165,17 @@ def get_watchlist(userid: int):
         print(f"DB fetching error: {e}")
         raise Exception("Failed to get watchlist")
 
-
+"""
+remove_from_watchlist(userid: int, ticker: str)
+	Removes a stock ticker from the user's watchlist.
+	
+	parameters:
+		- userid: User ID
+		- ticker: Stock ticker symbol
+	
+	returns:
+		- message indicating success or if the stock was not found in the watchlist
+"""
 def remove_from_watchlist(userid: int, ticker: str):
 	conn = get_db_connection()
 	if conn is None:

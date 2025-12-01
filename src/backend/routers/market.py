@@ -4,7 +4,7 @@ import yfinance as yf
 
 router = APIRouter()
 
-
+## format a single quote consistently
 def format_quote(quote: dict, name_override: str = None) -> dict:
     """Formats a single quote from yahoo-finance2 consistently."""
     change = quote.get("regularMarketChange")
@@ -38,7 +38,7 @@ def format_quote(quote: dict, name_override: str = None) -> dict:
     }
     return formatted_quote
 
-
+## get market overview data
 @router.get("/market/overview")
 async def get_market_overview_endpoint():
     """Fetches and returns formatted market overview data."""
@@ -75,7 +75,7 @@ async def get_market_overview_endpoint():
             status_code=500, detail="Could not retrieve market overview data."
         )
 
-
+## get market news
 @router.get("/market/news")
 async def get_market_news_endpoint():
     """Fetches and returns formatted market news data."""

@@ -9,7 +9,7 @@ from db import get_watchlist, insert_watchlist, remove_from_watchlist
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-
+## get user's watchlist
 @router.get("/user/watchlist")
 async def getWatchlist(token: Annotated[str, Depends(oauth2_scheme)]):
 	user_id = await getUserId(token)
@@ -18,6 +18,7 @@ async def getWatchlist(token: Annotated[str, Depends(oauth2_scheme)]):
 		return []
 	return get_stock_info_multi(" ".join(watchlist))
 
+## check if ticker is in watchlist
 @router.get("/user/watchlist/{ticker}")
 async def isInWatchlist(ticker: str, token: Annotated[str, Depends(oauth2_scheme)]):
 	user_id = await getUserId(token)
@@ -26,6 +27,7 @@ async def isInWatchlist(ticker: str, token: Annotated[str, Depends(oauth2_scheme
 		return True
 	return False
 
+## add ticker to watchlist
 @router.post("/user/watchlist/{ticker}")
 async def addWatchlist(
 	ticker: str, token: Annotated[str, Depends(oauth2_scheme)]
@@ -39,7 +41,7 @@ async def addWatchlist(
 	except Exception as e:
 		raise HTTPException(status_code=500, detail=str(e))
 
-
+## remove ticker from watchlist 
 @router.delete("/user/watchlist/{ticker}")
 async def deleteWatchlist(
 	ticker: str, token: Annotated[str, Depends(oauth2_scheme)]

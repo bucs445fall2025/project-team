@@ -5,7 +5,7 @@ from routers.stock_router import get_current_price
 
 router = APIRouter()
 
-
+## get stock price predictions
 @router.get("/predict/{ticker}")
 async def get_predictions(ticker: str):
 	currPrice = await get_current_price(ticker)

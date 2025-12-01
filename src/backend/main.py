@@ -45,15 +45,18 @@ trigger = CronTrigger(hour=13, minute=0) #1:00 pm daily
 scheduler.add_job(run_all_predictions, trigger)
 scheduler.start()
 
+## this handles startup and shutdown events
 @asynccontextmanager
 async def lifespan(app: FastAPI):
 	yield
 	scheduler.shutdown()
 
+## test endpoint
 @app.get("/")
 async def read_root():
 	return "Hello World"
 
+## this gets all stock info from yfinance
 @cached(cache=_yf_api_cache)
 @app.get("/api/v1/stock/{symbol}")
 async def get_stock(symbol: str):
@@ -66,6 +69,7 @@ async def get_stock(symbol: str):
 			detail=f"Lookup failed: {str(e)}"
 		)
 
+## this gets a specific field from the stock info
 @cached(cache=_yf_api_cache)
 @app.get("/api/v1/stock/{symbol}/{field}")
 async def get_stock_field(symbol: str, field: str):
@@ -85,6 +89,7 @@ async def get_stock_field(symbol: str, field: str):
 			detail=f"Lookup failed: {str(e)}"
 		)
 
+## this gets the stock symbol from company name
 @cached(cache=_yf_api_cache)
 @app.get("/api/v1/company/{company}")
 async def get_symbol(company: str):
@@ -104,6 +109,7 @@ async def get_symbol(company: str):
 			detail=f"Lookup failed: {str(e)}"
 		)
 
+## this adds stock info to the database
 @app.get("/api/v1/database/stockInfo/{symbol}")
 async def get_stock_info_from_database(symbol: str):
 	db = get_db_connection()
@@ -119,6 +125,7 @@ async def get_stock_info_from_database(symbol: str):
 
 	return rows
 
+## this endpoint adds stock info to the database
 @app.post("/api/v1/database/stockInfo/{symbol}")
 async def post_stock_info_to_database(symbol: str):
 	db = get_db_connection()
@@ -141,7 +148,7 @@ async def post_stock_info_to_database(symbol: str):
 	
 	return f"Added {symbol} to the table"
 
-
+## Run the app
 if __name__ == "__main__":
 	import uvicorn
 	uvicorn.run(app, host="localhost", port=8000)

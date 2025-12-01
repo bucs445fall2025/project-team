@@ -21,7 +21,7 @@ class LoginRequest(BaseModel):
 
 def encrypt_string(string: str):
     return hashlib.sha256(string.encode()).hexdigest()
-
+## user signup
 @router.post("/auth/signup")
 async def signup(signupBody: SignUpRequest, response: Response):
 
@@ -42,7 +42,7 @@ async def signup(signupBody: SignUpRequest, response: Response):
 	response.status_code = status.HTTP_201_CREATED
 	return f"Created user"
 
-
+## user login
 @router.post("/auth/login")
 async def login(loginRequest: LoginRequest, response: Response):
 	db = get_db_connection()
@@ -64,13 +64,13 @@ async def login(loginRequest: LoginRequest, response: Response):
 		"password": result[3]
 	}
 	return create_jwt_token(payload)
-
+## get user's first name
 @router.get("/auth/getFirstName")
 async def getFirstName(token: Annotated[str, Depends(oauth2_scheme)]):
     user_info = get_user_info(token)
     return {"firstName": user_info['first']}
 
-
+## get user's ID
 @router.get("/auth/getFirstName")
 async def getUserId(token: Annotated[str, Depends(oauth2_scheme)]):
     user_info = get_user_info(token)
